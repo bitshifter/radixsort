@@ -58,3 +58,7 @@ reverse was true. I have not analysed why this is the case yet.
 Performance wise C and C++ are very similar. Rust is a bit slower, again I
 haven't analysed the source of performance discrepency.
 
+## License
+
+This software is licensed under the zlib license, see the LICENSE file for
+details.
