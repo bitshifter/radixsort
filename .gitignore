@@ -1,0 +1,12 @@
+*.pyc
+*.swp
+*.user
+build/linux*
+build/win*
+obj/
+radixsort32
+radixsort32d
+radixsort64
+radixsort64d
+Session.vim
+tags
