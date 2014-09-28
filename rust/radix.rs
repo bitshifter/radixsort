@@ -161,7 +161,7 @@ fn radix_sort_uint<K: Unsigned + Int + FromPrimitive, V: Clone>(radix_bits: uint
 	let mut i1 = hist_size;
 	for i in range(0, hist_buckets)
 	{
-		let bucket = hist.mut_slice(i0, i1);
+		let bucket = hist.slice_mut(i0, i1);
 		match i & 1
 		{
 			0 => radix_pass(keys_in, keys_temp, values_in, values_temp, bucket,
@@ -214,7 +214,7 @@ fn radix_sort_float<V: Clone>(radix_bits: uint,
 	let mut i1 = hist_size;
 
 	{
-		let bucket = hist.mut_slice(i0, i1);
+		let bucket = hist.slice_mut(i0, i1);
 		radix_pass_decode_float(keys_in, keys_temp, values_in, values_temp, bucket,
 			key_bits, key_hist_mask);
 		key_bits += key_radix_bits;
@@ -224,7 +224,7 @@ fn radix_sort_float<V: Clone>(radix_bits: uint,
 
 	for i in range(1, hist_buckets - 1)
 	{
-		let bucket = hist.mut_slice(i0, i1);
+		let bucket = hist.slice_mut(i0, i1);
 		match i & 1
 		{
 			0 => radix_pass(keys_in, keys_temp, values_in, values_temp, bucket,
@@ -238,7 +238,7 @@ fn radix_sort_float<V: Clone>(radix_bits: uint,
 	}
 
 	{
-		let bucket = hist.mut_slice(i0, i1);
+		let bucket = hist.slice_mut(i0, i1);
 		match (hist_buckets - 1) & 1
 		{
 			0 => radix_pass_encode_float(keys_in, keys_temp, values_in, values_temp, bucket,
