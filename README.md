@@ -55,9 +55,6 @@ code on an Intel Core i5 and i7 the radix 8 sort is consistently faster than
 the radix 11 sort in all languages. Interestingly on an old Intel Atom, the
 reverse was true. I have not analysed why this is the case yet.
 
-Performance wise C and C++ are very similar. Rust is a bit slower, again I
-haven't analysed the source of performance discrepency.
-
 ## License
 
 This software is licensed under the zlib license, see the LICENSE file for
