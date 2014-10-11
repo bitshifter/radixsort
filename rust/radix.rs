@@ -256,17 +256,17 @@ pub fn radix8sort_u64<V: Clone>(
 	keys_in: &mut[u64], keys_temp: &mut[u64],
 	values_in: &mut[V], values_temp: &mut[V]) -> uint
 {
-	static kRadixBits: uint = 8;
-	static kKeyBits: uint = 8 * 8;
-	static kHistBuckets: uint = 1 + (kKeyBits - 1) / kRadixBits;
-	static kHistSize: uint = 1 << kRadixBits;
-	assert_eq!(kKeyBits, size_of::<u64>() * 8);
+	const RADIX_BITS: uint = 8;
+	const KEY_BITS: uint = 8 * 8;
+	const HIST_BUCKETS: uint = 1 + (KEY_BITS - 1) / RADIX_BITS;
+	const HISY_SIZE: uint = 1 << RADIX_BITS;
+	assert_eq!(KEY_BITS, size_of::<u64>() * 8);
 
-	let mut hist = [0u, ..kHistSize * kHistBuckets];
-	let mut sum = [0u, ..kHistBuckets];
+	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u, ..HIST_BUCKETS];
 
-	return radix_sort_uint(kRadixBits, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, kHistBuckets);
+	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
+		hist, sum, HIST_BUCKETS);
 }
 
 
@@ -274,18 +274,18 @@ pub fn radix8sort_u32<V: Clone>(
 	keys_in: &mut[u32], keys_temp: &mut[u32],
 	values_in: &mut[V], values_temp: &mut[V]) -> uint
 {
-	static kRadixBits: uint = 8;
-	static kKeyBits: uint = 4 * 8;
-	static kHistBuckets: uint = 1 + (kKeyBits - 1) / kRadixBits;
-	static kHistSize: uint = 1 << kRadixBits;
-	assert_eq!(kKeyBits, size_of::<f32>() * 8);
-	assert_eq!(kKeyBits, size_of::<u32>() * 8);
+	const RADIX_BITS: uint = 8;
+	const KEY_BITS: uint = 4 * 8;
+	const HIST_BUCKETS: uint = 1 + (KEY_BITS - 1) / RADIX_BITS;
+	const HISY_SIZE: uint = 1 << RADIX_BITS;
+	assert_eq!(KEY_BITS, size_of::<f32>() * 8);
+	assert_eq!(KEY_BITS, size_of::<u32>() * 8);
 
-	let mut hist = [0u, ..kHistSize * kHistBuckets];
-	let mut sum = [0u, ..kHistBuckets];
+	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u, ..HIST_BUCKETS];
 
-	return radix_sort_uint(kRadixBits, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, kHistBuckets);
+	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
+		hist, sum, HIST_BUCKETS);
 }
 
 
@@ -293,17 +293,17 @@ pub fn radix8sort_f32<V: Clone>(
 	fkeys_in: &mut[f32], fkeys_temp: &mut[f32],
 	values_in: &mut[V], values_temp: &mut[V]) -> uint
 {
-	static kRadixBits: uint = 8;
-	static kKeyBits: uint = 4 * 8;
-	static kHistBuckets: uint = 1 + (kKeyBits - 1) / kRadixBits;
-	static kHistSize: uint = 1 << kRadixBits;
-	assert_eq!(kKeyBits, size_of::<f32>() * 8);
+	const RADIX_BITS: uint = 8;
+	const KEY_BITS: uint = 4 * 8;
+	const HIST_BUCKETS: uint = 1 + (KEY_BITS - 1) / RADIX_BITS;
+	const HISY_SIZE: uint = 1 << RADIX_BITS;
+	assert_eq!(KEY_BITS, size_of::<f32>() * 8);
 
-	let mut hist = [0u, ..kHistSize * kHistBuckets];
-	let mut sum = [0u, ..kHistBuckets];
+	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u, ..HIST_BUCKETS];
 
-	return radix_sort_float(kRadixBits, fkeys_in, fkeys_temp, values_in, values_temp,
-		hist, sum, kHistBuckets);
+	return radix_sort_float(RADIX_BITS, fkeys_in, fkeys_temp, values_in, values_temp,
+		hist, sum, HIST_BUCKETS);
 }
 
 
@@ -311,17 +311,17 @@ pub fn radix11sort_u64<V: Clone>(
 	keys_in: &mut[u64], keys_temp: &mut[u64],
 	values_in: &mut[V], values_temp: &mut[V]) -> uint
 {
-	static kRadixBits: uint = 11;
-	static kKeyBits: uint = 8 * 8;
-	static kHistBuckets: uint = 1 + (kKeyBits - 1) / kRadixBits;
-	static kHistSize: uint = 1 << kRadixBits;
-	assert_eq!(kKeyBits, size_of::<u64>() * 8);
+	const RADIX_BITS: uint = 11;
+	const KEY_BITS: uint = 8 * 8;
+	const HIST_BUCKETS: uint = 1 + (KEY_BITS - 1) / RADIX_BITS;
+	const HISY_SIZE: uint = 1 << RADIX_BITS;
+	assert_eq!(KEY_BITS, size_of::<u64>() * 8);
 
-	let mut hist = [0u, ..kHistSize * kHistBuckets];
-	let mut sum = [0u, ..kHistBuckets];
+	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u, ..HIST_BUCKETS];
 
-	return radix_sort_uint(kRadixBits, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, kHistBuckets);
+	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
+		hist, sum, HIST_BUCKETS);
 }
 
 
@@ -329,17 +329,17 @@ pub fn radix11sort_u32<V: Clone>(
 	keys_in: &mut[u32], keys_temp: &mut[u32],
 	values_in: &mut[V], values_temp: &mut[V]) -> uint
 {
-	static kRadixBits: uint = 11;
-	static kKeyBits: uint = 4 * 8;
-	static kHistBuckets: uint = 1 + (kKeyBits - 1) / kRadixBits;
-	static kHistSize: uint = 1 << kRadixBits;
-	assert_eq!(kKeyBits, size_of::<u32>() * 8);
+	const RADIX_BITS: uint = 11;
+	const KEY_BITS: uint = 4 * 8;
+	const HIST_BUCKETS: uint = 1 + (KEY_BITS - 1) / RADIX_BITS;
+	const HISY_SIZE: uint = 1 << RADIX_BITS;
+	assert_eq!(KEY_BITS, size_of::<u32>() * 8);
 
-	let mut hist = [0u, ..kHistSize * kHistBuckets];
-	let mut sum = [0u, ..kHistBuckets];
+	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u, ..HIST_BUCKETS];
 
-	return radix_sort_uint(kRadixBits, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, kHistBuckets);
+	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
+		hist, sum, HIST_BUCKETS);
 }
 
 
@@ -347,16 +347,16 @@ pub fn radix11sort_f32<V: Clone>(
 	fkeys_in: &mut[f32], fkeys_temp: &mut[f32],
 	values_in: &mut[V], values_temp: &mut[V]) -> uint
 {
-	static kRadixBits: uint = 11;
-	static kKeyBits: uint = 4 * 8;
-	static kHistBuckets: uint = 1 + (kKeyBits - 1) / kRadixBits;
-	static kHistSize: uint = 1 << kRadixBits;
-	assert_eq!(kKeyBits, size_of::<f32>() * 8);
+	const RADIX_BITS: uint = 11;
+	const KEY_BITS: uint = 4 * 8;
+	const HIST_BUCKETS: uint = 1 + (KEY_BITS - 1) / RADIX_BITS;
+	const HISY_SIZE: uint = 1 << RADIX_BITS;
+	assert_eq!(KEY_BITS, size_of::<f32>() * 8);
 
-	let mut hist = [0u, ..kHistSize * kHistBuckets];
-	let mut sum = [0u, ..kHistBuckets];
+	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u, ..HIST_BUCKETS];
 
-	return radix_sort_float(kRadixBits, fkeys_in, fkeys_temp, values_in, values_temp,
-		hist, sum, kHistBuckets);
+	return radix_sort_float(RADIX_BITS, fkeys_in, fkeys_temp, values_in, values_temp,
+		hist, sum, HIST_BUCKETS);
 }
 

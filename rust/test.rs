@@ -78,17 +78,17 @@ fn test_radix<T: Primitive + Num + Rand + PrintArrayElem>(
 
 fn main()
 {
-	static size: uint = 8;
+	const SIZE: uint = 8;
 	println!("radix8sort u32");
-	test_radix(radix8sort_u32, size);
+	test_radix(radix8sort_u32, SIZE);
 	println!("radix8sort u64");
-	test_radix(radix8sort_u64, size);
+	test_radix(radix8sort_u64, SIZE);
 	println!("radix8sort f32");
-	test_radix(radix8sort_f32, size);
+	test_radix(radix8sort_f32, SIZE);
 	println!("radix11sort u32");
-	test_radix(radix11sort_u32, size);
+	test_radix(radix11sort_u32, SIZE);
 	println!("radix11sort u64");
-	test_radix(radix11sort_u64, size);
+	test_radix(radix11sort_u64, SIZE);
 	println!("radix11sort f32");
-	test_radix(radix11sort_f32, size);
+	test_radix(radix11sort_f32, SIZE);
 }
