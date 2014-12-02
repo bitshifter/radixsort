@@ -1,18 +1,17 @@
 extern crate rand;
 extern crate time;
 
-use helpers::check_sorted;
+use helpers::{ check_sorted, Zero };
 use radix::{ radix8sort_u32, radix8sort_u64, radix8sort_f32,
 	radix11sort_u32, radix11sort_u64, radix11sort_f32 };
 use std::rand::{ weak_rng, Rng, Rand };
-use std::num::zero;
 use std::vec::Vec;
 use time::precise_time_s;
 
 mod helpers;
 mod radix;
 
-fn perf_test<T: Primitive + Rand + PartialOrd>(
+fn perf_test<T: Rand + Zero + Clone + PartialOrd>(
 	radixsort8: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
 	radixsort11: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
 	size: uint, iterations: uint)
@@ -27,7 +26,7 @@ fn perf_test<T: Primitive + Rand + PartialOrd>(
 		let values_orig = Vec::from_fn(size, |i| i as u32);
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1 = Vec::from_elem(size, zero::<T>());
+			let mut keys1 = Vec::from_elem(size, Zero::zero());
 			let mut values0 = values_orig.clone();
 			let mut values1 = Vec::from_elem(size, 0u32);
 			let start_time = precise_time_s();
@@ -45,7 +44,7 @@ fn perf_test<T: Primitive + Rand + PartialOrd>(
 
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1 = Vec::from_elem(size, zero::<T>());
+			let mut keys1 = Vec::from_elem(size, Zero::zero());
 			let mut values0 = values_orig.clone();
 			let mut values1 = Vec::from_elem(size, 0u32);
 			let start_time = precise_time_s();
@@ -68,19 +67,19 @@ fn perf_test<T: Primitive + Rand + PartialOrd>(
 
 			for (key, value) in it
 			{
-				pairs.push((*key, *value));
+				pairs.push((key, value));
 			}
 			let start_time = precise_time_s();
 			pairs.sort_by(|a,b| {
 				let (ka, _) = *a;
 				let (kb, _) = *b;
-				ka.partial_cmp(&kb).unwrap()
+				ka.partial_cmp(kb).unwrap()
 			});
 			stdvec_total += precise_time_s() - start_time;
 		}
 	}
 	let mult = 1.0 / iterations as f64;
-	println!("{:6u}  {:.6f}  {:.6f}  {:.6f}", size, radix8_total * mult,
+	println!("{:6}  {:.6}  {:.6}  {:.6}", size, radix8_total * mult,
 		radix11_total * mult, stdvec_total * mult);
 }
 

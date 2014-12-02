@@ -23,6 +23,7 @@ use std::mem::transmute;
 use std::mem::size_of;
 use std::num::one;
 use std::num::from_uint;
+use std::num::{ Int, UnsignedInt };
 
 
 /**
@@ -76,7 +77,7 @@ fn sum_histograms(hist: &mut[uint], sum: &mut[uint],
 }
 
 
-fn radix_pass<K: Unsigned + Int, V: Clone>(
+fn radix_pass<K: UnsignedInt, V: Clone>(
 	keys_in: &[K], keys_out: &mut[K],
 	values_in: &[V], values_out: &mut[V],
 	hist: &mut[uint], shift: uint, mask: K)
@@ -130,7 +131,7 @@ fn radix_pass_encode_float<V: Clone>(
 }
 
 
-fn radix_sort_uint<K: Unsigned + Int + FromPrimitive, V: Clone>(radix_bits: uint,
+fn radix_sort_uint<K: UnsignedInt + FromPrimitive, V: Clone>(radix_bits: uint,
 	keys_in: &mut[K], keys_temp: &mut[K],
 	values_in: &mut[V], values_temp: &mut[V],
 	hist: &mut[uint], sum: &mut[uint], hist_buckets: uint) -> uint
@@ -140,7 +141,7 @@ fn radix_sort_uint<K: Unsigned + Int + FromPrimitive, V: Clone>(radix_bits: uint
 	assert_eq!(values_in.len(), values_temp.len());
 	let hist_size = 1 << radix_bits;
 	let key_hist_size = from_uint::<K>(hist_size).unwrap();
-	let key_hist_mask = key_hist_size - one::<K>();
+	let key_hist_mask = key_hist_size - Int::one();
 	let key_radix_bits = radix_bits;
 
 	for key in keys_in.iter()
@@ -266,7 +267,7 @@ pub fn radix8sort_u64<V: Clone>(
 	let mut sum = [0u, ..HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, HIST_BUCKETS);
+		&mut hist, &mut sum, HIST_BUCKETS);
 }
 
 
@@ -285,7 +286,7 @@ pub fn radix8sort_u32<V: Clone>(
 	let mut sum = [0u, ..HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, HIST_BUCKETS);
+		&mut hist, &mut sum, HIST_BUCKETS);
 }
 
 
@@ -303,7 +304,7 @@ pub fn radix8sort_f32<V: Clone>(
 	let mut sum = [0u, ..HIST_BUCKETS];
 
 	return radix_sort_float(RADIX_BITS, fkeys_in, fkeys_temp, values_in, values_temp,
-		hist, sum, HIST_BUCKETS);
+		&mut hist, &mut sum, HIST_BUCKETS);
 }
 
 
@@ -321,7 +322,7 @@ pub fn radix11sort_u64<V: Clone>(
 	let mut sum = [0u, ..HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, HIST_BUCKETS);
+		&mut hist, &mut sum, HIST_BUCKETS);
 }
 
 
@@ -339,7 +340,7 @@ pub fn radix11sort_u32<V: Clone>(
 	let mut sum = [0u, ..HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
-		hist, sum, HIST_BUCKETS);
+		&mut hist, &mut sum, HIST_BUCKETS);
 }
 
 
@@ -357,6 +358,6 @@ pub fn radix11sort_f32<V: Clone>(
 	let mut sum = [0u, ..HIST_BUCKETS];
 
 	return radix_sort_float(RADIX_BITS, fkeys_in, fkeys_temp, values_in, values_temp,
-		hist, sum, HIST_BUCKETS);
+		&mut hist, &mut sum, HIST_BUCKETS);
 }
 
