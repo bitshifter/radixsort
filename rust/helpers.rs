@@ -1,19 +1,3 @@
-pub trait Zero {
-	fn zero() -> Self;
-}
-
-impl Zero for u32 {
-	fn zero() -> u32 { 0u32 }
-}
-
-impl Zero for u64 {
-	fn zero() -> u64 { 0u64 }
-}
-
-impl Zero for f32 {
-	fn zero() -> f32 { 0f32 }
-}
-
 pub fn check_sorted<K: PartialOrd, V: ToPrimitive>(
 	keys: &[K], values: &[V], orig: &[K])
 {

@@ -1,9 +1,10 @@
 extern crate rand;
 extern crate time;
 
-use helpers::{ check_sorted, Zero };
+use helpers::{ check_sorted };
 use radix::{ radix8sort_u32, radix8sort_u64, radix8sort_f32,
 	radix11sort_u32, radix11sort_u64, radix11sort_f32 };
+use std::num::from_uint;
 use std::rand::{ weak_rng, Rng, Rand };
 use std::vec::Vec;
 use time::precise_time_s;
@@ -11,7 +12,7 @@ use time::precise_time_s;
 mod helpers;
 mod radix;
 
-fn perf_test<T: Rand + Zero + Clone + PartialOrd>(
+fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive>(
 	radixsort8: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
 	radixsort11: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
 	size: uint, iterations: uint)
@@ -26,7 +27,7 @@ fn perf_test<T: Rand + Zero + Clone + PartialOrd>(
 		let values_orig = Vec::from_fn(size, |i| i as u32);
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1 = Vec::from_elem(size, Zero::zero());
+			let mut keys1 = Vec::from_elem(size, from_uint::<T>(0).unwrap());
 			let mut values0 = values_orig.clone();
 			let mut values1 = Vec::from_elem(size, 0u32);
 			let start_time = precise_time_s();
@@ -44,7 +45,7 @@ fn perf_test<T: Rand + Zero + Clone + PartialOrd>(
 
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1 = Vec::from_elem(size, Zero::zero());
+			let mut keys1 = Vec::from_elem(size, from_uint::<T>(0).unwrap());
 			let mut values0 = values_orig.clone();
 			let mut values1 = Vec::from_elem(size, 0u32);
 			let start_time = precise_time_s();
