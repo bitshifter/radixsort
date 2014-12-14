@@ -7,4 +7,4 @@ project(radixsort)
 
 add_subdirectory(c)
 add_subdirectory(cpp)
-add_subdirectory(rust)
+#add_subdirectory(rust)

@@ -1,0 +1,5 @@
+[package]
+
+name = "radixsort"
+version = "0.0.1"
+authors = ["Cameron Hart <cam@bitshifter.net.nz>"]

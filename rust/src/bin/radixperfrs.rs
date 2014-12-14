@@ -1,8 +1,9 @@
 extern crate rand;
 extern crate time;
+extern crate radixsort;
 
 use helpers::{ check_sorted };
-use radix::{ radix8sort_u32, radix8sort_u64, radix8sort_f32,
+use radixsort::{ radix8sort_u32, radix8sort_u64, radix8sort_f32,
 	radix11sort_u32, radix11sort_u64, radix11sort_f32 };
 use std::num::from_uint;
 use std::rand::{ weak_rng, Rng, Rand };
@@ -10,7 +11,6 @@ use std::vec::Vec;
 use time::precise_time_s;
 
 mod helpers;
-mod radix;
 
 fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive>(
 	radixsort8: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
