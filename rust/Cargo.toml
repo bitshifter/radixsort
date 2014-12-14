@@ -3,3 +3,8 @@
 name = "radixsort"
 version = "0.0.1"
 authors = ["Cameron Hart <cam@bitshifter.net.nz>"]
+
+[dependencies.time]
+
+git = "http://github.com/rust-lang/time"
+
