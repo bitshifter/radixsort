@@ -18,6 +18,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 #![allow(dead_code)]
+#![feature(unboxed_closures)]
 
 use std::mem::transmute;
 use std::mem::size_of;
@@ -25,6 +26,7 @@ use std::num::one;
 use std::num::from_uint;
 use std::num::{ Int, UnsignedInt };
 
+pub mod introsort;
 
 /**
  * Flip a float for sorting.

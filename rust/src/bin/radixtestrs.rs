@@ -3,7 +3,7 @@ extern crate rand;
 
 use helpers::{ check_sorted };
 use radixsort::{ radix8sort_u32, radix8sort_u64, radix8sort_f32, radix11sort_u32,
-	radix11sort_u64, radix11sort_f32 };
+	radix11sort_u64, radix11sort_f32, introsort };
 use std::num::from_uint;
 use std::rand::{ weak_rng, Rng, Rand };
 use std::vec::Vec;
@@ -76,9 +76,19 @@ fn test_radix<T: Clone + PartialOrd + FromPrimitive + Rand + PrintArrayElem>(
 	}
 }
 
+fn test_introsort<T: PartialOrd + Rand + PrintArrayElem>(size: uint) {
+	let mut rng = weak_rng();
+	let mut keys = Vec::from_fn(size, |_| rng.gen::<T>());
+	print_array(keys.as_slice());
+	introsort::sort::<T>(keys.as_mut_slice());
+	print_array(keys.as_slice());
+}
+
 fn main()
 {
 	const SIZE: uint = 8;
+	println!("introsort u32");
+	test_introsort::<u32>(SIZE);
 	println!("radix8sort u32");
 	test_radix(radix8sort_u32, SIZE);
 	println!("radix8sort u64");
