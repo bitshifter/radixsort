@@ -23,7 +23,7 @@ use std::mem::transmute;
 use std::mem::size_of;
 use std::num::one;
 use std::num::from_uint;
-use std::num::{ Int, UnsignedInt };
+use std::num::{ FromPrimitive, Int, UnsignedInt };
 
 
 /**
@@ -263,8 +263,8 @@ pub fn radix8sort_u64<V: Clone>(
 	const HISY_SIZE: uint = 1 << RADIX_BITS;
 	assert_eq!(KEY_BITS, size_of::<u64>() * 8);
 
-	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
-	let mut sum = [0u, ..HIST_BUCKETS];
+	let mut hist = [0u; HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u; HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
 		&mut hist, &mut sum, HIST_BUCKETS);
@@ -282,8 +282,8 @@ pub fn radix8sort_u32<V: Clone>(
 	assert_eq!(KEY_BITS, size_of::<f32>() * 8);
 	assert_eq!(KEY_BITS, size_of::<u32>() * 8);
 
-	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
-	let mut sum = [0u, ..HIST_BUCKETS];
+	let mut hist = [0u; HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u; HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
 		&mut hist, &mut sum, HIST_BUCKETS);
@@ -300,8 +300,8 @@ pub fn radix8sort_f32<V: Clone>(
 	const HISY_SIZE: uint = 1 << RADIX_BITS;
 	assert_eq!(KEY_BITS, size_of::<f32>() * 8);
 
-	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
-	let mut sum = [0u, ..HIST_BUCKETS];
+	let mut hist = [0u; HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u; HIST_BUCKETS];
 
 	return radix_sort_float(RADIX_BITS, fkeys_in, fkeys_temp, values_in, values_temp,
 		&mut hist, &mut sum, HIST_BUCKETS);
@@ -318,8 +318,8 @@ pub fn radix11sort_u64<V: Clone>(
 	const HISY_SIZE: uint = 1 << RADIX_BITS;
 	assert_eq!(KEY_BITS, size_of::<u64>() * 8);
 
-	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
-	let mut sum = [0u, ..HIST_BUCKETS];
+	let mut hist = [0u; HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u; HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
 		&mut hist, &mut sum, HIST_BUCKETS);
@@ -336,8 +336,8 @@ pub fn radix11sort_u32<V: Clone>(
 	const HISY_SIZE: uint = 1 << RADIX_BITS;
 	assert_eq!(KEY_BITS, size_of::<u32>() * 8);
 
-	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
-	let mut sum = [0u, ..HIST_BUCKETS];
+	let mut hist = [0u; HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u; HIST_BUCKETS];
 
 	return radix_sort_uint(RADIX_BITS, keys_in, keys_temp, values_in, values_temp,
 		&mut hist, &mut sum, HIST_BUCKETS);
@@ -354,8 +354,8 @@ pub fn radix11sort_f32<V: Clone>(
 	const HISY_SIZE: uint = 1 << RADIX_BITS;
 	assert_eq!(KEY_BITS, size_of::<f32>() * 8);
 
-	let mut hist = [0u, ..HISY_SIZE * HIST_BUCKETS];
-	let mut sum = [0u, ..HIST_BUCKETS];
+	let mut hist = [0u; HISY_SIZE * HIST_BUCKETS];
+	let mut sum = [0u; HIST_BUCKETS];
 
 	return radix_sort_float(RADIX_BITS, fkeys_in, fkeys_temp, values_in, values_temp,
 		&mut hist, &mut sum, HIST_BUCKETS);

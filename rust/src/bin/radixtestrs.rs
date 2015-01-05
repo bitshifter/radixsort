@@ -4,7 +4,9 @@ extern crate rand;
 use helpers::{ check_sorted };
 use radixsort::{ radix8sort_u32, radix8sort_u64, radix8sort_f32, radix11sort_u32,
 	radix11sort_u64, radix11sort_f32 };
+use std::iter::{ repeat, range };
 use std::num::from_uint;
+use std::num::FromPrimitive;
 use std::rand::{ weak_rng, Rng, Rand };
 use std::vec::Vec;
 
@@ -52,12 +54,12 @@ fn test_radix<T: Clone + PartialOrd + FromPrimitive + Rand + PrintArrayElem>(
 	func: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint, size: uint)
 {
 	let mut rng = weak_rng();
-	let keys_orig = Vec::from_fn(size, |_| rng.gen::<T>());
-	let values_orig = Vec::from_fn(size, |i| i as u32);
+	let keys_orig: Vec<T> = range(0, size).map(|_| rng.gen::<T>()).collect();
+	let values_orig: Vec<u32> = range(0, size).map(|i| i as u32).collect();
 	let mut keys_in_out = keys_orig.clone();
-	let mut keys_temp = Vec::from_elem(size, from_uint::<T>(0).unwrap());
+	let mut keys_temp: Vec<T> = repeat(from_uint::<T>(0).unwrap()).take(size).collect();
 	let mut values_in_out = values_orig.clone();
-	let mut values_temp = Vec::from_elem(size, 0u32);
+	let mut values_temp: Vec<u32> = repeat(0u32).take(size).collect();
 	print_array(keys_in_out.as_slice());
 	let passes = func(keys_in_out.as_mut_slice(), keys_temp.as_mut_slice(),
 		values_in_out.as_mut_slice(), values_temp.as_mut_slice());
