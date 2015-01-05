@@ -5,7 +5,9 @@ extern crate radixsort;
 use helpers::{ check_sorted };
 use radixsort::{ radix8sort_u32, radix8sort_u64, radix8sort_f32,
 	radix11sort_u32, radix11sort_u64, radix11sort_f32 };
+use std::iter::{ range, repeat };
 use std::num::from_uint;
+use std::num::FromPrimitive;
 use std::rand::{ weak_rng, Rng, Rand };
 use std::vec::Vec;
 use time::precise_time_s;
@@ -23,13 +25,13 @@ fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive>(
 	let mut stdvec_total = 0f64;
 	for _ in range(0, iterations)
 	{
-		let keys_orig: Vec<T> = Vec::from_fn(size, |_| rng.gen());
-		let values_orig = Vec::from_fn(size, |i| i as u32);
+		let keys_orig: Vec<T> = range(0, size).map(|_| rng.gen()).collect();
+		let values_orig: Vec<u32> = range(0, size).map(|i| i as u32).collect();
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1 = Vec::from_elem(size, from_uint::<T>(0).unwrap());
+			let mut keys1: Vec<T>  = repeat(from_uint::<T>(0).unwrap()).take(size).collect();
 			let mut values0 = values_orig.clone();
-			let mut values1 = Vec::from_elem(size, 0u32);
+			let mut values1: Vec<u32> = repeat(0u32).take(size).collect();
 			let start_time = precise_time_s();
 			let passes = radixsort8(keys0.as_mut_slice(), keys1.as_mut_slice(),
 				values0.as_mut_slice(), values1.as_mut_slice());
@@ -45,9 +47,9 @@ fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive>(
 
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1 = Vec::from_elem(size, from_uint::<T>(0).unwrap());
+			let mut keys1: Vec<T> = repeat(from_uint::<T>(0).unwrap()).take(size).collect();
 			let mut values0 = values_orig.clone();
-			let mut values1 = Vec::from_elem(size, 0u32);
+			let mut values1: Vec<u32> = repeat(0u32).take(size).collect();
 			let start_time = precise_time_s();
 			let passes = radixsort11(keys0.as_mut_slice(), keys1.as_mut_slice(),
 				values0.as_mut_slice(), values1.as_mut_slice());

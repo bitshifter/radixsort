@@ -1,3 +1,5 @@
+use std::num::{ ToPrimitive };
+
 pub fn check_sorted<K: PartialOrd, V: ToPrimitive>(
 	keys: &[K], values: &[V], orig: &[K])
 {
