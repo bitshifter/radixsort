@@ -15,7 +15,7 @@ fn ptr_diff<T>(a: *const T, b: *const T) -> int {
     d as int
 }
 
-fn insertion_sort<T, F: Copy>(first: *mut T, last: *mut T, lt: F) where F: Fn(&T, &T) -> bool {
+fn insertion_sort<T, F>(first: *mut T, last: *mut T, lt: &F) where F: Fn(&T, &T) -> bool {
     let len = ptr_diff(first as *const T, last as *const T);
 
     // 1 <= i < len;
@@ -56,7 +56,7 @@ fn insertion_sort<T, F: Copy>(first: *mut T, last: *mut T, lt: F) where F: Fn(&T
     }
 }
 
-fn median<T, F: Copy>(v: &[T], a: uint, b: uint, c: uint, lt: F) -> uint where F: Fn(&T, &T) -> bool {
+fn median<T, F>(v: &[T], a: uint, b: uint, c: uint, lt: F) -> uint where F: Fn(&T, &T) -> bool {
     if lt(&v[a], &v[b]) {
         if lt(&v[b], &v[c]) {
             b
@@ -79,7 +79,7 @@ fn median<T, F: Copy>(v: &[T], a: uint, b: uint, c: uint, lt: F) -> uint where F
     }
 }
 
-fn median_3<T, F:Copy>(a: *mut T, b: *mut T, c: *mut T, lt: F) -> *mut T where F: Fn(&T, &T) -> bool {
+fn median_3<T, F>(a: *mut T, b: *mut T, c: *mut T, lt: &F) -> *mut T where F: Fn(&T, &T) -> bool {
     unsafe {
         if lt(&*a, &*b) {
             if lt(&*b, &*c) {
@@ -104,7 +104,7 @@ fn median_3<T, F:Copy>(a: *mut T, b: *mut T, c: *mut T, lt: F) -> *mut T where F
     }
 }
 
-fn partition<T, F: Copy>(mut first: *mut T, mut last: *mut T, pivot: *mut T, lt: F) -> *mut T
+fn partition<T, F>(mut first: *mut T, mut last: *mut T, pivot: *mut T, lt: &F) -> *mut T
         where F: Fn(&T, &T) -> bool {
     unsafe {
         loop {
@@ -124,7 +124,7 @@ fn partition<T, F: Copy>(mut first: *mut T, mut last: *mut T, pivot: *mut T, lt:
     }
 }
 
-fn partition_pivot<T, F: Copy>(first: *mut T, last: *mut T, lt: F) -> *mut T
+fn partition_pivot<T, F>(first: *mut T, last: *mut T, lt: &F) -> *mut T
         where F: Fn(&T, &T) -> bool {
     unsafe {
         let len = ptr_diff(first as *const T, last as *const T);
@@ -134,7 +134,7 @@ fn partition_pivot<T, F: Copy>(first: *mut T, last: *mut T, lt: F) -> *mut T
     }
 }
 
-fn intro_sort_loop<T, F: Copy>(first: *mut T, mut last: *mut T, mut depth_limit: uint, lt: F) where F: Fn(&T, &T) -> bool {
+fn intro_sort_loop<T, F>(first: *mut T, mut last: *mut T, mut depth_limit: uint, lt: &F) where F: Fn(&T, &T) -> bool {
     while ptr_diff(last as *const T, first as *const T) > THRESHOLD {
         if depth_limit == 0 {
             insertion_sort(first, last, lt);
@@ -147,14 +147,14 @@ fn intro_sort_loop<T, F: Copy>(first: *mut T, mut last: *mut T, mut depth_limit:
     }
 }
 
-pub fn sort_by<T: PartialOrd, F: Copy>(v: &mut[T], lt: F) where F: Fn(&T, &T) -> bool {
+pub fn sort_by<T: PartialOrd, F>(v: &mut[T], lt: F) where F: Fn(&T, &T) -> bool {
     let len = v.len();
     if len > 0 {
         unsafe {
             let first = v.as_mut_ptr();
             let last = first.offset(len as int - 1);
-            intro_sort_loop(first, last, 2 * lg(len), lt);
-            insertion_sort(first, last, lt);
+            intro_sort_loop(first, last, 2 * lg(len), &lt);
+            insertion_sort(first, last, &lt);
         }
     }
 }

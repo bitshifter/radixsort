@@ -81,7 +81,7 @@ fn test_radix<T: Clone + PartialOrd + FromPrimitive + Rand + PrintArrayElem,
 
 fn test_introsort<T: PartialOrd + Rand + PrintArrayElem>(size: uint) {
 	let mut rng = weak_rng();
-	let mut keys = Vec::from_fn(size, |_| rng.gen::<T>());
+	let mut keys: Vec<T> = range(0, size).map(|_| rng.gen::<T>()).collect();
 	print_array(keys.as_slice());
 	introsort::sort::<T>(keys.as_mut_slice());
 	print_array(keys.as_slice());
