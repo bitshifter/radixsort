@@ -50,8 +50,9 @@ fn print_array<Key: PrintArrayElem>(keys: &[Key])
 	println!("");
 }
 
-fn test_radix<T: Clone + PartialOrd + FromPrimitive + Rand + PrintArrayElem>(
-	func: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint, size: uint)
+fn test_radix<T: Clone + PartialOrd + FromPrimitive + Rand + PrintArrayElem,
+	F: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> uint>(
+	func: F, size: uint)
 {
 	let mut rng = weak_rng();
 	let keys_orig: Vec<T> = range(0, size).map(|_| rng.gen::<T>()).collect();

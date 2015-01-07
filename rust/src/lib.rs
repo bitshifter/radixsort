@@ -22,7 +22,6 @@
 
 use std::mem::transmute;
 use std::mem::size_of;
-use std::num::one;
 use std::num::from_uint;
 use std::num::{ FromPrimitive, Int, UnsignedInt };
 

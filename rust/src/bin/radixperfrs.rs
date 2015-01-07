@@ -14,10 +14,10 @@ use time::precise_time_s;
 
 mod helpers;
 
-fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive>(
-	radixsort8: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
-	radixsort11: |&mut[T], &mut[T], &mut[u32], &mut[u32]| -> uint,
-	size: uint, iterations: uint)
+fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive,
+F: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> uint,
+G: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> uint>(
+	radixsort8: F, radixsort11: G, size: uint, iterations: uint)
 {
 	let mut rng = weak_rng();
 	let mut radix8_total = 0f64;
@@ -98,7 +98,7 @@ fn main()
 	let mut i = start;
 	while i <= end
 	{
-		perf_test::<u32>(radix8sort_u32, radix11sort_u32, i, iterations);
+		perf_test(radix8sort_u32, radix11sort_u32, i, iterations);
 		i = i << 1;
 	}
 
@@ -108,7 +108,7 @@ fn main()
 	let mut i = start;
 	while i <= end
 	{
-		perf_test::<u64>(radix8sort_u64, radix11sort_u64, i, iterations);
+		perf_test(radix8sort_u64, radix11sort_u64, i, iterations);
 		i = i << 1;
 	}
 
@@ -118,7 +118,7 @@ fn main()
 	let mut i = start;
 	while i <= end
 	{
-		perf_test::<f32>(radix8sort_f32, radix11sort_f32, i, iterations);
+		perf_test(radix8sort_f32, radix11sort_f32, i, iterations);
 		i = i << 1;
 	}
 }
