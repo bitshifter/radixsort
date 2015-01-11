@@ -5,7 +5,7 @@ pub fn check_sorted<K: PartialOrd, V: ToPrimitive>(
 {
 	assert_eq!(keys.len(), values.len());
 	assert_eq!(keys.len(), orig.len());
-	for i in range(1, keys.len())
+	for i in (1..keys.len())
 	{
 		if keys[i - 1] > keys[i]
 		{

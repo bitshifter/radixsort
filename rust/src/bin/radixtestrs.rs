@@ -1,13 +1,12 @@
 extern crate radixsort;
-extern crate rand;
 
 use helpers::{ check_sorted };
 use radixsort::{ radix8sort_u32, radix8sort_u64, radix8sort_f32, radix11sort_u32,
 	radix11sort_u64, radix11sort_f32 };
-use std::iter::{ repeat, range };
+use std::iter;
 use std::num::from_uint;
 use std::num::FromPrimitive;
-use std::rand::{ weak_rng, Rng, Rand };
+use std::rand::{ self, Rng, Rand };
 use std::vec::Vec;
 
 mod helpers;
@@ -51,37 +50,35 @@ fn print_array<Key: PrintArrayElem>(keys: &[Key])
 }
 
 fn test_radix<T: Clone + PartialOrd + FromPrimitive + Rand + PrintArrayElem,
-	F: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> uint>(
-	func: F, size: uint)
+	F: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> usize>(
+	func: F, size: usize)
 {
-	let mut rng = weak_rng();
-	let keys_orig: Vec<T> = range(0, size).map(|_| rng.gen::<T>()).collect();
-	let values_orig: Vec<u32> = range(0, size).map(|i| i as u32).collect();
+	let mut rng = rand::weak_rng();
+	let keys_orig: Vec<T> = (0..size).map(|_| rng.gen::<T>()).collect();
+	let values_orig: Vec<u32> = (0..size).map(|i| i as u32).collect();
 	let mut keys_in_out = keys_orig.clone();
-	let mut keys_temp: Vec<T> = repeat(from_uint::<T>(0).unwrap()).take(size).collect();
+	let mut keys_temp: Vec<T> = iter::repeat(from_uint::<T>(0).unwrap()).take(size).collect();
 	let mut values_in_out = values_orig.clone();
-	let mut values_temp: Vec<u32> = repeat(0u32).take(size).collect();
-	print_array(keys_in_out.as_slice());
+	let mut values_temp: Vec<u32> = iter::repeat(0u32).take(size).collect();
+	print_array(&keys_in_out[]);
 	let passes = func(keys_in_out.as_mut_slice(), keys_temp.as_mut_slice(),
 		values_in_out.as_mut_slice(), values_temp.as_mut_slice());
 	match passes & 1
 	{
 		0 => { 
-			print_array(keys_in_out.as_slice());
-			check_sorted(keys_in_out.as_slice(), values_in_out.as_slice(),
-				keys_orig.as_slice());
+			print_array(&keys_in_out[]);
+			check_sorted(&keys_in_out[], &values_in_out[], &keys_orig[]);
 		},
 		_ => {
-			print_array(keys_temp.as_slice());
-			check_sorted(keys_temp.as_slice(), values_temp.as_slice(),
-				keys_orig.as_slice());
+			print_array(&keys_temp[]);
+			check_sorted(&keys_temp[], &values_temp[], &keys_orig[]);
 		}
 	}
 }
 
 fn main()
 {
-	const SIZE: uint = 8;
+	const SIZE: usize = 8;
 	println!("radix8sort u32");
 	test_radix(radix8sort_u32, SIZE);
 	println!("radix8sort u64");
