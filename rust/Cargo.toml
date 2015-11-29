@@ -1,10 +1,11 @@
 [package]
 
 name = "radixsort"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Cameron Hart <cam@bitshifter.net.nz>"]
 
 [dependencies]
-time="*"
-sortrs="*"
-
+rand = "*"
+time = "*"
+sortrs = "*"
+num = "*"

@@ -1,19 +1,19 @@
+extern crate num;
 extern crate rand;
 extern crate sortrs;
 extern crate time;
 extern crate radixsort;
 
-use helpers::{ check_sorted };
+use num::FromPrimitive;
 use radixsort::{ radix8sort_u32, radix8sort_u64, radix8sort_f32,
 	radix11sort_u32, radix11sort_u64, radix11sort_f32 };
+use rand::{ weak_rng, Rng, Rand };
 use std::iter::{ repeat };
-use std::num::from_uint;
-use std::num::FromPrimitive;
-use std::rand::{ weak_rng, Rng, Rand };
 use std::vec::Vec;
 use time::precise_time_s;
 use sortrs::{ introsort_by };
 
+#[macro_use]
 mod helpers;
 
 fn perf_test<T: Rand + Clone + PartialOrd + FromPrimitive,
@@ -32,38 +32,36 @@ G: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> usize>(
 		let values_orig: Vec<u32> = (0..size).map(|i| i as u32).collect();
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1: Vec<T>  = repeat(from_uint::<T>(0).unwrap()).take(size).collect();
+			let mut keys1: Vec<T>  = repeat(FromPrimitive::from_usize(0).unwrap()).take(size).collect();
 			let mut values0 = values_orig.clone();
 			let mut values1: Vec<u32> = repeat(0u32).take(size).collect();
 			let start_time = precise_time_s();
-			let passes = radixsort8(keys0.as_mut_slice(), keys1.as_mut_slice(),
-				values0.as_mut_slice(), values1.as_mut_slice());
+			let passes = radixsort8(&mut keys0, &mut keys1, &mut values0, &mut values1);
 			radix8_total += precise_time_s() - start_time;
 			match passes & 1
 			{
-				0 => check_sorted(&keys0[], &values0[], &keys_orig[]),
-				_ => check_sorted(&keys1[], &values1[], &keys_orig[])
+				0 => check_sorted!(keys0, values0, keys_orig),
+				_ => check_sorted!(keys1, values1, keys_orig)
 			}
 		}
 
 		{
 			let mut keys0 = keys_orig.clone();
-			let mut keys1: Vec<T> = repeat(from_uint::<T>(0).unwrap()).take(size).collect();
+			let mut keys1: Vec<T> = repeat(FromPrimitive::from_usize(0).unwrap()).take(size).collect();
 			let mut values0 = values_orig.clone();
 			let mut values1: Vec<u32> = repeat(0u32).take(size).collect();
 			let start_time = precise_time_s();
-			let passes = radixsort11(keys0.as_mut_slice(), keys1.as_mut_slice(),
-				values0.as_mut_slice(), values1.as_mut_slice());
+			let passes = radixsort11(&mut keys0, &mut keys1, &mut values0, &mut values1);
 			radix11_total += precise_time_s() - start_time;
 			match passes & 1
 			{
-				0 => check_sorted(&keys0[], &values0[], &keys_orig[]),
-				_ => check_sorted(&keys1[], &values1[], &keys_orig[])
+				0 => check_sorted!(keys0, values0, keys_orig),
+				_ => check_sorted!(keys1, values1, keys_orig)
 			}
 		}
 
 		{
-			let mut it = keys_orig.iter().zip(values_orig.iter());
+			let it = keys_orig.iter().zip(values_orig.iter());
 			let (lower, _) = it.size_hint();
 			let mut pairs = Vec::with_capacity(lower);
 
@@ -81,7 +79,7 @@ G: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> usize>(
 		}
 
 		{
-			let mut it = keys_orig.iter().zip(values_orig.iter());
+			let it = keys_orig.iter().zip(values_orig.iter());
 			let (lower, _) = it.size_hint();
 			let mut pairs = Vec::with_capacity(lower);
 
@@ -90,7 +88,7 @@ G: Fn(&mut[T], &mut[T], &mut[u32], &mut[u32]) -> usize>(
 				pairs.push((key, value));
 			}
 			let start_time = precise_time_s();
-			sortrs::introsort_by(&mut pairs[], |a, b| {
+			sortrs::introsort_by(&mut pairs, |a, b| {
 				let (ka, _) = *a;
 				let (kb, _) = *b;
 				ka.lt(kb)
