@@ -66,9 +66,9 @@ private:
 	 */
 	template <typename PassDecodeOp, typename PassEncodeOp>
 	static inline void radixPass(
-		const KeyType * restrict keysIn, KeyType * restrict keysOut,
-		const ValueType * restrict valuesIn, ValueType * restrict valuesOut,
-		uint32_t size, uint32_t * restrict hist, KeyType shift,
+		const KeyType * __restrict keysIn, KeyType * __restrict keysOut,
+		const ValueType * __restrict valuesIn, ValueType * __restrict valuesOut,
+		uint32_t size, uint32_t * __restrict hist, KeyType shift,
 		PassDecodeOp decodeOp, PassEncodeOp encodeOp)
 	{
 		for (uint32_t i = 0; i < size; ++i)
@@ -82,8 +82,8 @@ private:
 	}
 
 public:
-	std::pair<KeyType *, ValueType *> operator()(KeyType * restrict keysIn, KeyType * restrict keysTemp,
-		ValueType * restrict valuesIn, ValueType * restrict valuesTemp, uint32_t size)
+	std::pair<KeyType *, ValueType *> operator()(KeyType * __restrict keysIn, KeyType * __restrict keysTemp,
+		ValueType * __restrict valuesIn, ValueType * __restrict valuesTemp, uint32_t size)
 	{
 		DecodeOp decodeOp;
 		EncodeOp encodeOp;
@@ -122,8 +122,8 @@ public:
 		}
 
 		// alternate input and output buffers on each radix pass
-		KeyType * restrict keys[2] = { keysIn, keysTemp };
-		ValueType * restrict values[2] = { valuesIn, valuesTemp };
+		KeyType * __restrict keys[2] = { keysIn, keysTemp };
+		ValueType * __restrict values[2] = { valuesIn, valuesTemp };
 
 		{
 			// decode key on first radix pass
@@ -157,8 +157,8 @@ public:
 
 template <typename ValueType>
 inline std::pair<uint32_t *, ValueType *> radixSort8(
-	uint32_t * restrict keysInOut, uint32_t * restrict keysTemp,
-	ValueType * restrict valuesInOut, ValueType * valuesTemp,
+	uint32_t * __restrict keysInOut, uint32_t * __restrict keysTemp,
+	ValueType * __restrict valuesInOut, ValueType * valuesTemp,
 	uint32_t size)
 {
 	detail::RadixSort<8, uint32_t, ValueType> sort;
@@ -168,8 +168,8 @@ inline std::pair<uint32_t *, ValueType *> radixSort8(
 
 template <typename ValueType>
 inline std::pair<uint64_t *, ValueType *> radixSort8(
-	uint64_t * restrict keysInOut, uint64_t * restrict keysTemp,
-	ValueType * restrict valuesInOut, ValueType * valuesTemp,
+	uint64_t * __restrict keysInOut, uint64_t * __restrict keysTemp,
+	ValueType * __restrict valuesInOut, ValueType * valuesTemp,
 	uint32_t size)
 {
 	detail::RadixSort<8, uint64_t, ValueType> sort;
@@ -179,8 +179,8 @@ inline std::pair<uint64_t *, ValueType *> radixSort8(
 
 template <typename ValueType>
 inline std::pair<uint32_t *, ValueType *> radixSort11(
-	uint32_t * restrict keysIn, uint32_t * restrict keysOut,
-	ValueType * restrict valuesIn, ValueType * restrict valuesOut,
+	uint32_t * __restrict keysIn, uint32_t * __restrict keysOut,
+	ValueType * __restrict valuesIn, ValueType * __restrict valuesOut,
 	uint32_t size)
 {
 	detail::RadixSort<11, uint32_t, ValueType> sort;
@@ -190,8 +190,8 @@ inline std::pair<uint32_t *, ValueType *> radixSort11(
 
 template <typename ValueType>
 inline std::pair<uint64_t *, ValueType *> radixSort11(
-	uint64_t * restrict keysIn, uint64_t * restrict keysOut,
-	ValueType * restrict valuesIn, ValueType * restrict valuesOut,
+	uint64_t * __restrict keysIn, uint64_t * __restrict keysOut,
+	ValueType * __restrict valuesIn, ValueType * __restrict valuesOut,
 	uint32_t size)
 {
 	detail::RadixSort<11, uint64_t, ValueType> sort;
@@ -201,13 +201,13 @@ inline std::pair<uint64_t *, ValueType *> radixSort11(
 
 template <typename ValueType>
 inline std::pair<float *, ValueType *> radixSort8(
-	float * restrict keysInOutf, float * restrict keysTempf,
-	ValueType * restrict valuesInOut, ValueType * restrict valuesTemp,
+	float * __restrict keysInOutf, float * __restrict keysTempf,
+	ValueType * __restrict valuesInOut, ValueType * __restrict valuesTemp,
 	uint32_t size)
 {
 	// create uint32_t pointers to inputs to avoid float to int casting
-	uint32_t * restrict keysInOut = (uint32_t*)keysInOutf;
-	uint32_t * restrict keysTemp = (uint32_t*)keysTempf;
+	uint32_t * __restrict keysInOut = reinterpret_cast<uint32_t *>(keysInOutf);
+	uint32_t * __restrict keysTemp = reinterpret_cast<uint32_t *>(keysTempf);
 
 	detail::RadixSort<8, uint32_t, ValueType,
 		detail::FloatFlip, detail::InvFloatFlip> sort;
@@ -218,13 +218,13 @@ inline std::pair<float *, ValueType *> radixSort8(
 
 template <typename ValueType>
 inline std::pair<float *, ValueType *> radixSort11(
-	float * restrict keysInf, float * restrict keysOutf,
-	ValueType * restrict valuesIn, ValueType * restrict valuesOut,
+	float * __restrict keysInf, float * __restrict keysOutf,
+	ValueType * __restrict valuesIn, ValueType * __restrict valuesOut,
 	uint32_t size)
 {
 	// create uint32_t pointers to inputs to avoid float to int casting
-	uint32_t * restrict keysIn = (uint32_t*)keysInf;
-	uint32_t * restrict keysOut = (uint32_t*)keysOutf;
+	uint32_t * __restrict keysIn = reinterpret_cast<uint32_t *>(keysInf);
+	uint32_t * __restrict keysOut = reinterpret_cast<uint32_t *>(keysOutf);
 
 	detail::RadixSort<11, uint32_t, ValueType,
 		detail::FloatFlip, detail::InvFloatFlip> sort;
