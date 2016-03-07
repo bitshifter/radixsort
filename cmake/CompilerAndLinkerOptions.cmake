@@ -40,7 +40,6 @@ if(UNIX)
 	set(COMPILER_FLAGS_RELEASE
 		-DNDEBUG
 		-O3
-		-fomit-frame-pointer
 		-ffunction-sections
 		)
 
