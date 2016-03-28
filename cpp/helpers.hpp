@@ -19,84 +19,84 @@ namespace bits
 
 template <typename KeyType, typename ValueType>
 void check_sorted(const KeyType * keys, const ValueType * values,
-				 const KeyType * orig, size_t size)
+                 const KeyType * orig, size_t size)
 {
-	for (uint32_t i = 1; i < (uint32_t)(size); ++i) {
-		if ((keys)[i - 1] > (keys)[i])
-		{									\
-			printf("Key sort error at index %u\n", i - 1);
-			assert(false);
-		}
-		if ((keys)[i] != (orig)[(values)[i]])
-		{
-			printf("Value error at index %u\n", i);
-			assert(false);
-		}
-	}
+    for (uint32_t i = 1; i < (uint32_t)(size); ++i) {
+        if ((keys)[i - 1] > (keys)[i])
+        {                                   \
+            printf("Key sort error at index %u\n", i - 1);
+            assert(false);
+        }
+        if ((keys)[i] != (orig)[(values)[i]])
+        {
+            printf("Value error at index %u\n", i);
+            assert(false);
+        }
+    }
 }
 
 void print_array(const float * keys, uint32_t size)
 {
-	for (uint32_t i = 0; i < size; ++i)
-	{
-		printf("%f ", (keys)[i]);
-	}
-	putchar('\n');
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        printf("%f ", (keys)[i]);
+    }
+    putchar('\n');
 }
 
 void print_array(const uint32_t * keys, uint32_t size)
 {
-	for (uint32_t i = 0; i < size; ++i)
-	{
-		printf("%08" PRIx32 " ", keys[i]);
-	}
-	putchar('\n');
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        printf("%08" PRIx32 " ", keys[i]);
+    }
+    putchar('\n');
 }
 
 void print_array(const uint64_t * keys, uint32_t size)
 {
-	for (uint32_t i = 0; i < size; ++i)
-	{
-		printf("%016" PRIx64 " ", keys[i]);
-	}
-	putchar('\n');
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        printf("%016" PRIx64 " ", keys[i]);
+    }
+    putchar('\n');
 }
 
 void rand_keys(std::mt19937 & rnd32, uint32_t * keys, uint32_t * indices,
-	uint32_t * copy, uint32_t size)
+    uint32_t * copy, uint32_t size)
 {
-	for (uint32_t i = 0; i < size; ++i)
-	{
-		keys[i] = rnd32();
-		copy[i] = keys[i];
-		indices[i] = i;
-	}
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        keys[i] = rnd32();
+        copy[i] = keys[i];
+        indices[i] = i;
+    }
 }
 
 void rand_keys(std::mt19937_64 & rnd64, uint64_t * keys, uint32_t * indices,
-	uint64_t * copy, uint32_t size)
+    uint64_t * copy, uint32_t size)
 {
-	for (uint32_t i = 0; i < size; ++i)
-	{
-		keys[i] = rnd64();
-		copy[i] = keys[i];
-		indices[i] = i;
-	}
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        keys[i] = rnd64();
+        copy[i] = keys[i];
+        indices[i] = i;
+    }
 }
 
 void rand_keys(std::mt19937 & rnd32, float * keys, uint32_t * indices,
-	float * copy, uint32_t size)
+    float * copy, uint32_t size)
 {
-	for (uint32_t i = 0; i < size; ++i)
-	{
-		keys[i] = (float)(rnd32()) / 2048.0f;
-		if (rand() & 1)
-		{
-			keys[i] = -keys[i];
-		}
-		copy[i] = keys[i];
-		indices[i] = i;
-	}
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        keys[i] = (float)(rnd32()) / 2048.0f;
+        if (rand() & 1)
+        {
+            keys[i] = -keys[i];
+        }
+        copy[i] = keys[i];
+        indices[i] = i;
+    }
 }
 
 } // namespace bits
