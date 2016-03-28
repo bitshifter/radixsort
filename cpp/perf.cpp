@@ -5,11 +5,11 @@
 #include <chrono>
 #include <vector>
 
-//#define PRINT_ARRAY(keys, size) printArray((keys), (size))
+//#define PRINT_ARRAY(keys, size) print_array((keys), (size))
 #define PRINT_ARRAY(...)
 
 template <typename KeyType, typename Rand>
-void perfTest(Rand rng, uint32_t arraySize, uint32_t iterations)
+void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
 {
 	using namespace bits;
 
@@ -18,69 +18,69 @@ void perfTest(Rand rng, uint32_t arraySize, uint32_t iterations)
 	using std::chrono::seconds;
 	using std::vector;
 
-	duration<double, seconds::period> radix8Total_s, radix11Total_s,
-			stdSortTotal_s, stdStableTotal_s;
-	double invIter = 1.0 / (double)iterations;
+	duration<double, seconds::period> radix8_total_s, radix11_total_s,
+			std_sort_total_s, std_stable_sort_total_s;
+	double inv_iter = 1.0 / (double)iterations;
 
-	vector<KeyType> keysOrig(arraySize);
-	vector<KeyType> keys0(arraySize);
-	vector<KeyType> keys1(arraySize);
-	vector<uint32_t> valuesOrig(arraySize);
-	vector<uint32_t> values0(arraySize);
-	vector<uint32_t> values1(arraySize);
+	vector<KeyType> keys_orig(array_size);
+	vector<KeyType> keys0(array_size);
+	vector<KeyType> keys1(array_size);
+	vector<uint32_t> values_orig(array_size);
+	vector<uint32_t> values0(array_size);
+	vector<uint32_t> values1(array_size);
 
 	for (uint32_t i = 0; i < iterations; ++i)
 	{
-		randKeys(rng, keysOrig.data(), valuesOrig.data(), keysOrig.data(), arraySize);
+		rand_keys(rng, keys_orig.data(), values_orig.data(), keys_orig.data(), array_size);
 
 		{
-			keys0 = keysOrig;
-			values0 = valuesOrig;
-			PRINT_ARRAY(keys0, arraySize);
+			keys0 = keys_orig;
+			values0 = values_orig;
+			PRINT_ARRAY(keys0, array_size);
 			auto start = high_resolution_clock::now();
-			auto result = radixSort8(keys0.data(), keys1.data(),
-				values0.data(), values1.data(), arraySize);
-			radix8Total_s += high_resolution_clock::now() - start;
-			PRINT_ARRAY(result.first, arraySize);
-			checkSorted(result.first, result.second, keysOrig.data(), arraySize);
+			auto result = radix8sort(keys0.data(), keys1.data(),
+				values0.data(), values1.data(), array_size);
+			radix8_total_s += high_resolution_clock::now() - start;
+			PRINT_ARRAY(result.first, array_size);
+			check_sorted(result.first, result.second, keys_orig.data(), array_size);
 		}
 
 		{
-			keys0 = keysOrig;
-			values0 = valuesOrig;
-			PRINT_ARRAY(keys0, arraySize);
+			keys0 = keys_orig;
+			values0 = values_orig;
+			PRINT_ARRAY(keys0, array_size);
 			auto start = high_resolution_clock::now();
-			auto result = radixSort11(keys0.data(), keys1.data(),
-				values0.data(), values1.data(), arraySize);
-			radix11Total_s += high_resolution_clock::now() - start;
-			PRINT_ARRAY(result.first, arraySize);
-			checkSorted(result.first, result.second, keysOrig.data(), arraySize);
+			auto result = radix11sort(keys0.data(), keys1.data(),
+				values0.data(), values1.data(), array_size);
+			radix11_total_s += high_resolution_clock::now() - start;
+			PRINT_ARRAY(result.first, array_size);
+			check_sorted(result.first, result.second, keys_orig.data(), array_size);
 		}
 
 		{
-			keys0 = keysOrig;
-			PRINT_ARRAY(keys0, arraySize);
+			//keys0 = keys_orig;
+			PRINT_ARRAY(keys0, array_size);
 			auto start = high_resolution_clock::now();
-			std::sort(std::begin(keys0), std::end(keys0));
-			stdSortTotal_s += high_resolution_clock::now() - start;
-			PRINT_ARRAY(keys1, arraySize);
+			//std::sort(std::begin(keys0), std::end(keys0));
+			std_sort_total_s += high_resolution_clock::now() - start;
+			PRINT_ARRAY(keys1, array_size);
 		}
 
 		{
-			keys0 = keysOrig;
-			PRINT_ARRAY(keys0, arraySize);
+			//keys0 = keys_orig;
+			PRINT_ARRAY(keys0, array_size);
 			auto start = high_resolution_clock::now();
-			std::stable_sort(std::begin(keys0), std::end(keys0));
-			stdStableTotal_s += high_resolution_clock::now() - start;
-			PRINT_ARRAY(keys1, arraySize);
+			//std::stable_sort(std::begin(keys0), std::end(keys0));
+			std_stable_sort_total_s += high_resolution_clock::now() - start;
+			PRINT_ARRAY(keys1, array_size);
 		}
 	}
 
 	printf("%6" PRIu32 "  %5f  %5f  %5f  %5f\n",
-			arraySize, radix8Total_s.count() * invIter,
-			radix11Total_s.count() * invIter,
-			stdSortTotal_s.count() * invIter,
-			stdStableTotal_s.count() * invIter);
+			array_size, radix8_total_s.count() * inv_iter,
+			radix11_total_s.count() * inv_iter,
+			std_sort_total_s.count() * inv_iter,
+			std_stable_sort_total_s.count() * inv_iter);
 }
 
 int main()
@@ -95,20 +95,20 @@ int main()
 	puts("  size    radix8   radix11 std::sort  ::stable");
 	for (uint32_t i = start; i <= end; i = i << 1)
 	{
-		perfTest<uint32_t>(rnd32, i, iterations);
+		perf_test<uint32_t>(rnd32, i, iterations);
 	}
 
 	printf("\nRadix sort uint64_t key (%u iterations)\n", iterations);
 	puts("  size    radix8   radix11 std::sort  ::stable");
 	for (uint32_t i = start; i <= end; i = i << 1)
 	{
-		perfTest<uint64_t>(rnd64, i, iterations);
+		perf_test<uint64_t>(rnd64, i, iterations);
 	}
 
 	printf("\nRadix sort float key (%u iterations)\n", iterations);
 	puts("  size    radix8   radix11 std::sort  ::stable");
 	for (uint32_t i = start; i <= end; i = i << 1)
 	{
-		perfTest<float>(rnd32, i, iterations);
+		perf_test<float>(rnd32, i, iterations);
 	}
 }

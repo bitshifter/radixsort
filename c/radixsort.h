@@ -31,34 +31,34 @@
 extern "C" {
 #endif
 
-extern void radixSort8UInt32(
-		uint32_t * restrict keysInOut, uint32_t * restrict keysTemp,
-		uint32_t * restrict valuesInOut, uint32_t * valuesTemp,
+extern void radix8sort_u32(
+		uint32_t * restrict keys_in_out, uint32_t * restrict keys_temp,
+		uint32_t * restrict values_in_out, uint32_t * values_temp,
 		uint32_t size);
 
-extern void radixSort8UInt64(
-		uint64_t * restrict keysInOut, uint64_t * restrict keysTemp,
-		uint32_t * restrict valuesInOut, uint32_t * valuesTemp,
+extern void radix8sort_u64(
+		uint64_t * restrict keys_in_out, uint64_t * restrict keys_temp,
+		uint32_t * restrict values_in_out, uint32_t * values_temp,
 		uint32_t size);
 
-extern void radixSort8Float(
-		float * restrict keysInOut, float * restrict keysTemp,
-		uint32_t * restrict valuesInOut, uint32_t * restrict valuesTemp,
+extern void radix8sort_f32(
+		float * restrict keys_in_out, float * restrict keys_temp,
+		uint32_t * restrict values_in_out, uint32_t * restrict values_temp,
 		uint32_t size);
 
-extern void radixSort11UInt32(
-		uint32_t * restrict keysIn, uint32_t * restrict keysOut,
-		uint32_t * restrict valuesIn, uint32_t * restrict valuesOut,
+extern void radix11sort_u32(
+		uint32_t * restrict keys_in, uint32_t * restrict keys_out,
+		uint32_t * restrict values_in, uint32_t * restrict values_out,
 		uint32_t size);
 
-extern void radixSort11UInt64(
-		uint64_t * restrict keysInOut, uint64_t * restrict keysTemp,
-		uint32_t * restrict valuesInOut, uint32_t * valuesTemp,
+extern void radix11sort_u64(
+		uint64_t * restrict keys_in_out, uint64_t * restrict keys_temp,
+		uint32_t * restrict values_in_out, uint32_t * values_temp,
 		uint32_t size);
 
-extern void radixSort11Float(
-		float * restrict keysIn, float * restrict keysOut,
-		uint32_t * restrict valuesIn, uint32_t * restrict valuesOut,
+extern void radix11sort_f32(
+		float * restrict keys_in, float * restrict keys_out,
+		uint32_t * restrict values_in, uint32_t * restrict values_out,
 		uint32_t size);
 
 #ifdef __cplusplus

@@ -13,145 +13,145 @@
 #define PRINT_UINT32_ARRAY(...)
 #define PRINT_UINT64_ARRAY(...)
 
-void perfTestUInt32(uint32_t arraySize, uint32_t iterations)
+void perf_test_u32(uint32_t array_size, uint32_t iterations)
 {
 
-	double radix8Total_s = 0, radix11Total_s = 0;
-	double invIter = 1.0 / (double)iterations;
+	double radix8_total_s = 0, radix11_total_s = 0;
+	double inv_iter = 1.0 / (double)iterations;
 
-	uint32_t * keysOrig = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * keys0 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * keys1 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * valuesOrig = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
+	uint32_t * keys_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * keys0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * keys1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
 
 	for (uint32_t i = 0; i < iterations; ++i)
 	{
-		RAND_UINT32_KEYS(keysOrig, valuesOrig, keysOrig, arraySize);
+		RAND_UINT32_KEYS(keys_orig, values_orig, keys_orig, array_size);
 
-		memcpy(keys0, keysOrig, sizeof(uint32_t) * arraySize);
-		memcpy(values0, valuesOrig, sizeof(uint32_t) * arraySize);
-		PRINT_UINT32_ARRAY(keys0, arraySize);
-		BITS_TIMER_START(radixSort8UInt32);
-		radixSort8UInt32(keys0, keys1, values0, values1, arraySize);
-		radix8Total_s += BITS_TIMER_END(radixSort8UInt32);
-		PRINT_UINT32_ARRAY(keys0, arraySize);
-		CHECK_SORTED(keys0, values0, keysOrig, arraySize);
+		memcpy(keys0, keys_orig, sizeof(uint32_t) * array_size);
+		memcpy(values0, values_orig, sizeof(uint32_t) * array_size);
+		PRINT_UINT32_ARRAY(keys0, array_size);
+		BITS_TIMER_START(radix8sort_u32);
+		radix8sort_u32(keys0, keys1, values0, values1, array_size);
+		radix8_total_s += BITS_TIMER_END(radix8sort_u32);
+		PRINT_UINT32_ARRAY(keys0, array_size);
+		CHECK_SORTED(keys0, values0, keys_orig, array_size);
 
-		memcpy(keys0, keysOrig, sizeof(uint32_t) * arraySize);
-		memcpy(values0, valuesOrig, sizeof(uint32_t) * arraySize);
-		PRINT_UINT32_ARRAY(keys0, arraySize);
-		BITS_TIMER_START(radixSort11UInt32);
-		radixSort11UInt32(keys0, keys1, values0, values1, arraySize);
-		radix11Total_s += BITS_TIMER_END(radixSort11UInt32);
-		PRINT_UINT32_ARRAY(keys1, arraySize);
-		CHECK_SORTED(keys1, values1, keysOrig, arraySize);
+		memcpy(keys0, keys_orig, sizeof(uint32_t) * array_size);
+		memcpy(values0, values_orig, sizeof(uint32_t) * array_size);
+		PRINT_UINT32_ARRAY(keys0, array_size);
+		BITS_TIMER_START(radix11sort_u32);
+		radix11sort_u32(keys0, keys1, values0, values1, array_size);
+		radix11_total_s += BITS_TIMER_END(radix11sort_u32);
+		PRINT_UINT32_ARRAY(keys1, array_size);
+		CHECK_SORTED(keys1, values1, keys_orig, array_size);
 	}
 
-	free(keysOrig);
+	free(keys_orig);
 	free(keys0);
 	free(keys1);
-	free(valuesOrig);
+	free(values_orig);
 	free(values0);
 	free(values1);
 
-	printf("%6" PRIu32 "  %5f  %5f\n", arraySize, radix8Total_s * invIter,
-		radix11Total_s * invIter);
+	printf("%6" PRIu32 "  %5f  %5f\n", array_size, radix8_total_s * inv_iter,
+		radix11_total_s * inv_iter);
 }
 
 
-void perfTestUInt64(uint32_t arraySize, uint32_t iterations)
+void perf_test_u64(uint32_t array_size, uint32_t iterations)
 {
 
-	double radix8Total_s = 0, radix11Total_s = 0;
-	double invIter = 1.0 / (double)iterations;
+	double radix8_total_s = 0, radix11_total_s = 0;
+	double inv_iter = 1.0 / (double)iterations;
 
-	uint64_t * keysOrig = (uint64_t *)malloc(sizeof(uint64_t) * arraySize);
-	uint64_t * keys0 = (uint64_t *)malloc(sizeof(uint64_t) * arraySize);
-	uint64_t * keys1 = (uint64_t *)malloc(sizeof(uint64_t) * arraySize);
-	uint32_t * valuesOrig = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
+	uint64_t * keys_orig = (uint64_t *)malloc(sizeof(uint64_t) * array_size);
+	uint64_t * keys0 = (uint64_t *)malloc(sizeof(uint64_t) * array_size);
+	uint64_t * keys1 = (uint64_t *)malloc(sizeof(uint64_t) * array_size);
+	uint32_t * values_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
 
 	for (uint32_t i = 0; i < iterations; ++i)
 	{
-		RAND_UINT64_KEYS(keysOrig, valuesOrig, keysOrig, arraySize);
+		RAND_UINT64_KEYS(keys_orig, values_orig, keys_orig, array_size);
 
-		memcpy(keys0, keysOrig, sizeof(uint64_t) * arraySize);
-		memcpy(values0, valuesOrig, sizeof(uint32_t) * arraySize);
-		PRINT_UINT64_ARRAY(keys0, arraySize);
-		BITS_TIMER_START(radixSort8UInt64);
-		radixSort8UInt64(keys0, keys1, values0, values1, arraySize);
-		radix8Total_s += BITS_TIMER_END(radixSort8UInt64);
-		PRINT_UINT64_ARRAY(keys0, arraySize);
-		CHECK_SORTED(keys0, values0, keysOrig, arraySize);
+		memcpy(keys0, keys_orig, sizeof(uint64_t) * array_size);
+		memcpy(values0, values_orig, sizeof(uint32_t) * array_size);
+		PRINT_UINT64_ARRAY(keys0, array_size);
+		BITS_TIMER_START(radix8sort_u64);
+		radix8sort_u64(keys0, keys1, values0, values1, array_size);
+		radix8_total_s += BITS_TIMER_END(radix8sort_u64);
+		PRINT_UINT64_ARRAY(keys0, array_size);
+		CHECK_SORTED(keys0, values0, keys_orig, array_size);
 
-		memcpy(keys0, keysOrig, sizeof(uint64_t) * arraySize);
-		memcpy(values0, valuesOrig, sizeof(uint32_t) * arraySize);
-		PRINT_UINT32_ARRAY(keys0, arraySize);
-		BITS_TIMER_START(radixSort11UInt64);
-		radixSort11UInt64(keys0, keys1, values0, values1, arraySize);
-		radix11Total_s += BITS_TIMER_END(radixSort11UInt64);
-		PRINT_UINT32_ARRAY(keys0, arraySize);
-		CHECK_SORTED(keys0, values0, keysOrig, arraySize);
+		memcpy(keys0, keys_orig, sizeof(uint64_t) * array_size);
+		memcpy(values0, values_orig, sizeof(uint32_t) * array_size);
+		PRINT_UINT32_ARRAY(keys0, array_size);
+		BITS_TIMER_START(radix11sort_u64);
+		radix11sort_u64(keys0, keys1, values0, values1, array_size);
+		radix11_total_s += BITS_TIMER_END(radix11sort_u64);
+		PRINT_UINT32_ARRAY(keys0, array_size);
+		CHECK_SORTED(keys0, values0, keys_orig, array_size);
 	}
 
-	free(keysOrig);
+	free(keys_orig);
 	free(keys0);
 	free(keys1);
-	free(valuesOrig);
+	free(values_orig);
 	free(values0);
 	free(values1);
 
-	printf("%6" PRIu32 "  %5f  %5f\n", arraySize, radix8Total_s * invIter,
-		radix11Total_s * invIter);
+	printf("%6" PRIu32 "  %5f  %5f\n", array_size, radix8_total_s * inv_iter,
+		radix11_total_s * inv_iter);
 }
 
 
-void perfTestFloat(uint32_t arraySize, uint32_t iterations)
+void perf_test_f32(uint32_t array_size, uint32_t iterations)
 {
-	double radix8Total_s = 0, radix11Total_s = 0;
-	double invIter = 1.0 / (double)iterations;
+	double radix8_total_s = 0, radix11_total_s = 0;
+	double inv_iter = 1.0 / (double)iterations;
 
-	float * keysOrig = (float *)malloc(sizeof(float) * arraySize);
-	float * keys0 = (float *)malloc(sizeof(float) * arraySize);
-	float * keys1 = (float *)malloc(sizeof(float) * arraySize);
-	uint32_t * valuesOrig = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
-	uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * arraySize);
+	float * keys_orig = (float *)malloc(sizeof(float) * array_size);
+	float * keys0 = (float *)malloc(sizeof(float) * array_size);
+	float * keys1 = (float *)malloc(sizeof(float) * array_size);
+	uint32_t * values_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+	uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
 
 	for (uint32_t i = 0; i < iterations; ++i)
 	{
-		RAND_FLOAT_KEYS(keysOrig, valuesOrig, keysOrig, arraySize);
+		RAND_FLOAT_KEYS(keys_orig, values_orig, keys_orig, array_size);
 
-		memcpy(keys0, keysOrig, sizeof(float) * arraySize);
-		memcpy(values0, valuesOrig, sizeof(uint32_t) * arraySize);
-		PRINT_FLOAT_ARRAY(keys0, arraySize);
-		BITS_TIMER_START(radixSort8Float);
-		radixSort8Float(keys0, keys1, values0, values1, arraySize);
-		radix8Total_s += BITS_TIMER_END(radixSort8Float);
-		PRINT_FLOAT_ARRAY(keys0, arraySize);
-		CHECK_SORTED(keys0, values0, keysOrig, arraySize);
+		memcpy(keys0, keys_orig, sizeof(float) * array_size);
+		memcpy(values0, values_orig, sizeof(uint32_t) * array_size);
+		PRINT_FLOAT_ARRAY(keys0, array_size);
+		BITS_TIMER_START(radix8sort_f32);
+		radix8sort_f32(keys0, keys1, values0, values1, array_size);
+		radix8_total_s += BITS_TIMER_END(radix8sort_f32);
+		PRINT_FLOAT_ARRAY(keys0, array_size);
+		CHECK_SORTED(keys0, values0, keys_orig, array_size);
 
-		memcpy(keys0, keysOrig, sizeof(float) * arraySize);
-		memcpy(values0, valuesOrig, sizeof(uint32_t) * arraySize);
-		PRINT_FLOAT_ARRAY(keys0, arraySize);
-		BITS_TIMER_START(radixSort11Float);
-		radixSort11Float(keys0, keys1, values0, values1, arraySize);
-		radix11Total_s += BITS_TIMER_END(radixSort11Float);
-		PRINT_FLOAT_ARRAY(keys1, arraySize);
-		CHECK_SORTED(keys1, values1, keysOrig, arraySize);
+		memcpy(keys0, keys_orig, sizeof(float) * array_size);
+		memcpy(values0, values_orig, sizeof(uint32_t) * array_size);
+		PRINT_FLOAT_ARRAY(keys0, array_size);
+		BITS_TIMER_START(radix11sort_f32);
+		radix11sort_f32(keys0, keys1, values0, values1, array_size);
+		radix11_total_s += BITS_TIMER_END(radix11sort_f32);
+		PRINT_FLOAT_ARRAY(keys1, array_size);
+		CHECK_SORTED(keys1, values1, keys_orig, array_size);
 	}
 
-	free(keysOrig);
+	free(keys_orig);
 	free(keys0);
 	free(keys1);
 	free(values0);
 	free(values1);
 
-	printf("%6" PRIu32 "  %5f  %5f\n", arraySize, radix8Total_s * invIter,
-		radix11Total_s * invIter);
+	printf("%6" PRIu32 "  %5f  %5f\n", array_size, radix8_total_s * inv_iter,
+		radix11_total_s * inv_iter);
 }
 
 int main()
@@ -162,20 +162,20 @@ int main()
 	puts("  size    radix8   radix11");
 	for (uint32_t i = start; i <= end; i = i << 1)
 	{
-		perfTestUInt32(i, iterations);
+		perf_test_u32(i, iterations);
 	}
 
 	printf("\nRadix sort uint64_t key (%u iterations)\n", iterations);
 	puts("  size    radix8   radix11");
 	for (uint32_t i = start; i <= end; i = i << 1)
 	{
-		perfTestUInt64(i, iterations);
+		perf_test_u64(i, iterations);
 	}
 
 	printf("\nRadix sort float key (%u iterations)\n", iterations);
 	puts("  size    radix8   radix11");
 	for (uint32_t i = start; i <= end; i = i << 1)
 	{
-		perfTestFloat(i, iterations);
+		perf_test_f32(i, iterations);
 	}
 }

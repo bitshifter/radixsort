@@ -27,39 +27,39 @@ namespace bits
 {
 
 template <typename ValueType>
-std::pair<uint32_t *, ValueType *> radixSort8(
-		uint32_t * __restrict keysInOut, uint32_t * __restrict keysTemp,
-		ValueType * __restrict valuesInOut, ValueType * valuesTemp,
+std::pair<uint32_t *, ValueType *> radix8sort(
+		uint32_t * __restrict keys_in_out, uint32_t * __restrict keys_temp,
+		ValueType * __restrict values_in_out, ValueType * values_temp,
 		uint32_t size);
 
 template <typename ValueType>
-std::pair<uint64_t *, ValueType *> radixSort8(
-		uint64_t * __restrict keysInOut, uint64_t * __restrict keysTemp,
-		ValueType * __restrict valuesInOut, ValueType * valuesTemp,
+std::pair<uint64_t *, ValueType *> radix8sort(
+		uint64_t * __restrict keys_in_out, uint64_t * __restrict keys_temp,
+		ValueType * __restrict values_in_out, ValueType * values_temp,
 		uint32_t size);
 
 template <typename ValueType>
-std::pair<float *, ValueType *> radixSort8(
-		float * __restrict keysInOut, float * __restrict keysTemp,
-		ValueType * __restrict valuesInOut, ValueType * __restrict valuesTemp,
+std::pair<float *, ValueType *> radix8sort(
+		float * __restrict keys_in_out, float * __restrict keys_temp,
+		ValueType * __restrict values_in_out, ValueType * __restrict values_temp,
 		uint32_t size);
 
 template <typename ValueType>
-std::pair<uint32_t *, ValueType *> radixSort11(
-		uint32_t * __restrict keysIn, uint32_t * __restrict keysOut,
-		ValueType * __restrict valuesIn, ValueType * __restrict valuesOut,
+std::pair<uint32_t *, ValueType *> radix11sort(
+		uint32_t * __restrict keys_in, uint32_t * __restrict keys_out,
+		ValueType * __restrict values_in, ValueType * __restrict values_out,
 		uint32_t size);
 
 template <typename ValueType>
-std::pair<uint64_t *, ValueType *> radixSort11(
-		uint64_t * __restrict keysInOut, uint64_t * __restrict keysTemp,
-		ValueType * __restrict valuesInOut, ValueType * __restrict valuesTemp,
+std::pair<uint64_t *, ValueType *> radix11sort(
+		uint64_t * __restrict keys_in_out, uint64_t * __restrict keys_temp,
+		ValueType * __restrict values_in_out, ValueType * __restrict values_temp,
 		uint32_t size);
 
 template <typename ValueType>
-std::pair<float *, ValueType *> radixSort11(
-		float * __restrict keysIn, float * __restrict keysOut,
-		ValueType * __restrict valuesIn, ValueType * __restrict valuesOut,
+std::pair<float *, ValueType *> radix11sort(
+		float * __restrict keys_in, float * __restrict keys_out,
+		ValueType * __restrict values_in, ValueType * __restrict values_out,
 		uint32_t size);
 
 } // namespace bits

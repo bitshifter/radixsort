@@ -18,7 +18,7 @@ namespace bits
 {
 
 template <typename KeyType, typename ValueType>
-void checkSorted(const KeyType * keys, const ValueType * values,
+void check_sorted(const KeyType * keys, const ValueType * values,
 				 const KeyType * orig, size_t size)
 {
 	for (uint32_t i = 1; i < (uint32_t)(size); ++i) {
@@ -35,7 +35,7 @@ void checkSorted(const KeyType * keys, const ValueType * values,
 	}
 }
 
-void printArray(const float * keys, uint32_t size)
+void print_array(const float * keys, uint32_t size)
 {
 	for (uint32_t i = 0; i < size; ++i)
 	{
@@ -44,7 +44,7 @@ void printArray(const float * keys, uint32_t size)
 	putchar('\n');
 }
 
-void printArray(const uint32_t * keys, uint32_t size)
+void print_array(const uint32_t * keys, uint32_t size)
 {
 	for (uint32_t i = 0; i < size; ++i)
 	{
@@ -53,7 +53,7 @@ void printArray(const uint32_t * keys, uint32_t size)
 	putchar('\n');
 }
 
-void printArray(const uint64_t * keys, uint32_t size)
+void print_array(const uint64_t * keys, uint32_t size)
 {
 	for (uint32_t i = 0; i < size; ++i)
 	{
@@ -62,7 +62,7 @@ void printArray(const uint64_t * keys, uint32_t size)
 	putchar('\n');
 }
 
-void randKeys(std::mt19937 & rnd32, uint32_t * keys, uint32_t * indices,
+void rand_keys(std::mt19937 & rnd32, uint32_t * keys, uint32_t * indices,
 	uint32_t * copy, uint32_t size)
 {
 	for (uint32_t i = 0; i < size; ++i)
@@ -73,7 +73,7 @@ void randKeys(std::mt19937 & rnd32, uint32_t * keys, uint32_t * indices,
 	}
 }
 
-void randKeys(std::mt19937_64 & rnd64, uint64_t * keys, uint32_t * indices,
+void rand_keys(std::mt19937_64 & rnd64, uint64_t * keys, uint32_t * indices,
 	uint64_t * copy, uint32_t size)
 {
 	for (uint32_t i = 0; i < size; ++i)
@@ -84,7 +84,7 @@ void randKeys(std::mt19937_64 & rnd64, uint64_t * keys, uint32_t * indices,
 	}
 }
 
-void randKeys(std::mt19937 & rnd32, float * keys, uint32_t * indices,
+void rand_keys(std::mt19937 & rnd32, float * keys, uint32_t * indices,
 	float * copy, uint32_t size)
 {
 	for (uint32_t i = 0; i < size; ++i)
