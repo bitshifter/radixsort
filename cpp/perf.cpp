@@ -58,19 +58,19 @@ void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
         }
 
         {
-            //keys0 = keys_orig;
+            keys0 = keys_orig;
             PRINT_ARRAY(keys0, array_size);
             auto start = high_resolution_clock::now();
-            //std::sort(std::begin(keys0), std::end(keys0));
+            std::sort(std::begin(keys0), std::end(keys0));
             std_sort_total_s += high_resolution_clock::now() - start;
             PRINT_ARRAY(keys1, array_size);
         }
 
         {
-            //keys0 = keys_orig;
+            keys0 = keys_orig;
             PRINT_ARRAY(keys0, array_size);
             auto start = high_resolution_clock::now();
-            //std::stable_sort(std::begin(keys0), std::end(keys0));
+            std::stable_sort(std::begin(keys0), std::end(keys0));
             std_stable_sort_total_s += high_resolution_clock::now() - start;
             PRINT_ARRAY(keys1, array_size);
         }
