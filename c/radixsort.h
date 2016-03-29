@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#if _MSC_VER <= 1700
+#if _MSC_VER
 #define restrict __restrict
 #endif
 
