@@ -11,19 +11,18 @@
 #define TO_NANOSECS 1000000000
 
 
-void bits_time_init(BitsTime * time)
+void bits_time_init(BitsTime* time)
 {
-    static_assert(sizeof(struct timespec) <= sizeof(BitsTime),
-        "Not enough space for timespec");
-    struct timespec * ts = (struct timespec *)time;
+    static_assert(sizeof(struct timespec) <= sizeof(BitsTime), "Not enough space for timespec");
+    struct timespec* ts = (struct timespec*)time;
     clock_gettime(CLOCK_MONOTONIC, ts);
 }
 
 
-double bits_time_delta_secs(const BitsTime * time)
+double bits_time_delta_secs(const BitsTime* time)
 {
     struct timespec now, result;
-    const struct timespec * start = (struct timespec *)time;
+    const struct timespec* start = (struct timespec*)time;
     clock_gettime(CLOCK_MONOTONIC, &now);
     result.tv_sec = now.tv_sec - start->tv_sec;
     result.tv_nsec = now.tv_nsec - start->tv_nsec;

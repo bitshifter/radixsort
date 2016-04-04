@@ -18,8 +18,8 @@ void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
     using std::chrono::seconds;
     using std::vector;
 
-    duration<double, seconds::period> radix8_total_s, radix11_total_s,
-            std_sort_total_s, std_stable_sort_total_s;
+    duration<double, seconds::period> radix8_total_s, radix11_total_s, std_sort_total_s,
+        std_stable_sort_total_s;
     double inv_iter = 1.0 / (double)iterations;
 
     vector<KeyType> keys_orig(array_size);
@@ -38,8 +38,8 @@ void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
             values0 = values_orig;
             PRINT_ARRAY(keys0, array_size);
             auto start = high_resolution_clock::now();
-            auto result = radix8sort(keys0.data(), keys1.data(),
-                values0.data(), values1.data(), array_size);
+            auto result =
+                radix8sort(keys0.data(), keys1.data(), values0.data(), values1.data(), array_size);
             radix8_total_s += high_resolution_clock::now() - start;
             PRINT_ARRAY(result.first, array_size);
             check_sorted(result.first, result.second, keys_orig.data(), array_size);
@@ -50,8 +50,8 @@ void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
             values0 = values_orig;
             PRINT_ARRAY(keys0, array_size);
             auto start = high_resolution_clock::now();
-            auto result = radix11sort(keys0.data(), keys1.data(),
-                values0.data(), values1.data(), array_size);
+            auto result =
+                radix11sort(keys0.data(), keys1.data(), values0.data(), values1.data(), array_size);
             radix11_total_s += high_resolution_clock::now() - start;
             PRINT_ARRAY(result.first, array_size);
             check_sorted(result.first, result.second, keys_orig.data(), array_size);
@@ -76,11 +76,9 @@ void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
         }
     }
 
-    printf("%6" PRIu32 "  %5f  %5f  %5f  %5f\n",
-            array_size, radix8_total_s.count() * inv_iter,
-            radix11_total_s.count() * inv_iter,
-            std_sort_total_s.count() * inv_iter,
-            std_stable_sort_total_s.count() * inv_iter);
+    printf("%6" PRIu32 "  %5f  %5f  %5f  %5f\n", array_size, radix8_total_s.count() * inv_iter,
+        radix11_total_s.count() * inv_iter, std_sort_total_s.count() * inv_iter,
+        std_stable_sort_total_s.count() * inv_iter);
 }
 
 int main()

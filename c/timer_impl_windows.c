@@ -6,7 +6,7 @@
 
 #define TO_NANOSECS 1000000000
 
-void bits_time_init(BitsTime * time)
+void bits_time_init(BitsTime* time)
 {
     LARGE_INTEGER frequency;
     LARGE_INTEGER delta;
@@ -18,7 +18,7 @@ void bits_time_init(BitsTime * time)
 }
 
 
-double bits_time_delta_secs(const BitsTime * time)
+double bits_time_delta_secs(const BitsTime* time)
 {
     BitsTime now;
     bits_time_init(&now);

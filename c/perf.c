@@ -19,12 +19,12 @@ void perf_test_u32(uint32_t array_size, uint32_t iterations)
     double radix8_total_s = 0, radix11_total_s = 0;
     double inv_iter = 1.0 / (double)iterations;
 
-    uint32_t * keys_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * keys0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * keys1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* keys_orig = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* keys0 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* keys1 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values_orig = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values0 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values1 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
 
     for (uint32_t i = 0; i < iterations; ++i)
     {
@@ -67,12 +67,12 @@ void perf_test_u64(uint32_t array_size, uint32_t iterations)
     double radix8_total_s = 0, radix11_total_s = 0;
     double inv_iter = 1.0 / (double)iterations;
 
-    uint64_t * keys_orig = (uint64_t *)malloc(sizeof(uint64_t) * array_size);
-    uint64_t * keys0 = (uint64_t *)malloc(sizeof(uint64_t) * array_size);
-    uint64_t * keys1 = (uint64_t *)malloc(sizeof(uint64_t) * array_size);
-    uint32_t * values_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+    uint64_t* keys_orig = (uint64_t*)malloc(sizeof(uint64_t) * array_size);
+    uint64_t* keys0 = (uint64_t*)malloc(sizeof(uint64_t) * array_size);
+    uint64_t* keys1 = (uint64_t*)malloc(sizeof(uint64_t) * array_size);
+    uint32_t* values_orig = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values0 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values1 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
 
     for (uint32_t i = 0; i < iterations; ++i)
     {
@@ -114,12 +114,12 @@ void perf_test_f32(uint32_t array_size, uint32_t iterations)
     double radix8_total_s = 0, radix11_total_s = 0;
     double inv_iter = 1.0 / (double)iterations;
 
-    float * keys_orig = (float *)malloc(sizeof(float) * array_size);
-    float * keys0 = (float *)malloc(sizeof(float) * array_size);
-    float * keys1 = (float *)malloc(sizeof(float) * array_size);
-    uint32_t * values_orig = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values0 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
-    uint32_t * values1 = (uint32_t *)malloc(sizeof(uint32_t) * array_size);
+    float* keys_orig = (float*)malloc(sizeof(float) * array_size);
+    float* keys0 = (float*)malloc(sizeof(float) * array_size);
+    float* keys1 = (float*)malloc(sizeof(float) * array_size);
+    uint32_t* values_orig = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values0 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
+    uint32_t* values1 = (uint32_t*)malloc(sizeof(uint32_t) * array_size);
 
     for (uint32_t i = 0; i < iterations; ++i)
     {

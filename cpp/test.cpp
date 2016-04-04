@@ -6,7 +6,7 @@
 using namespace bits;
 
 template <typename KeyType, typename Rng>
-void test_radix8sort(Rng & rng)
+void test_radix8sort(Rng& rng)
 {
     static const uint32_t array_size = 8;
     std::array<KeyType, array_size> keys_in_out;
@@ -17,14 +17,15 @@ void test_radix8sort(Rng & rng)
 
     rand_keys(rng, keys_in_out.data(), values_in_out.data(), keys_copy.data(), array_size);
     print_array(keys_in_out.data(), array_size);
-    radix8sort(keys_in_out.data(), keys_temp.data(), values_in_out.data(), values_temp.data(), array_size);
+    radix8sort(
+        keys_in_out.data(), keys_temp.data(), values_in_out.data(), values_temp.data(), array_size);
     print_array(keys_in_out.data(), array_size);
     check_sorted(keys_in_out.data(), values_in_out.data(), keys_copy.data(), array_size);
 }
 
 
 template <typename KeyType, typename Rng>
-void test_radix11sort(Rng & rng)
+void test_radix11sort(Rng& rng)
 {
     static const uint32_t array_size = 8;
     KeyType keys_in[array_size];
