@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <random>
 
-#if _MSC_VER <= 1700
+#if defined(_MSC_VER) && (_MSC_VER <= 1700)
 #define PRIu32 "lu"
 #define PRIx32 "lx"
 #define PRIx64 "llx"
