@@ -16,5 +16,7 @@ if(UNIX AND NOT APPLE)
 	list(APPEND CSRCS timer_impl_linux.c)
 endif()
 
+add_library("radixsortc" ${CSRCS} ${CHDRS})
+
 add_executable("radixperfc${CMAKE_MACHINE_TYPE}" ${CSRCS} ${CHDRS} perf.c)
 add_executable("radixtestc${CMAKE_MACHINE_TYPE}" ${CSRCS} ${CHDRS} test.c)

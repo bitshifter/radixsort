@@ -5,8 +5,6 @@ include(CompilerAndLinkerOptions)
 
 project(radixsort)
 
-if (NOT MSVC)
-	# MSVC doesn't support C99 variable length arrays
-	add_subdirectory(c)
-endif()
-add_subdirectory(cpp)
+#add_subdirectory(bench)
+#add_subdirectory(src)
+add_subdirectory(test)

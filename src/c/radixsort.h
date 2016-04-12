@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#if _MSC_VER
+#if _MSC_VER || __cplusplus
 #define restrict __restrict
 #endif
 
@@ -43,8 +43,8 @@ extern void radix8sort_f32(float* restrict keys_in_out, float* restrict keys_tem
 extern void radix11sort_u32(uint32_t* restrict keys_in, uint32_t* restrict keys_out,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size);
 
-extern void radix11sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
-    uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size);
+extern void radix11sort_u64(uint64_t* restrict keys_in, uint64_t* restrict keys_out,
+    uint32_t* restrict values_in, uint32_t* values_out, uint32_t size);
 
 extern void radix11sort_f32(float* restrict keys_in, float* restrict keys_out,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size);
