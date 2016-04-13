@@ -163,7 +163,7 @@ static inline void radixpass_u64(uint32_t* restrict hist, uint32_t shift, uint32
 }
 
 
-static inline void radixsort_u32(uint32_t kRadixBits, uint32_t* restrict keys_in,
+static inline uint32_t radixsort_u32(uint32_t kRadixBits, uint32_t* restrict keys_in,
     uint32_t* restrict keys_temp, uint32_t* restrict values_in, uint32_t* values_temp,
     uint32_t size)
 {
@@ -180,33 +180,36 @@ static inline void radixsort_u32(uint32_t kRadixBits, uint32_t* restrict keys_in
     uint32_t* restrict keys[2] = {keys_in, keys_temp};
     uint32_t* restrict values[2] = {values_in, values_temp};
 
+    uint32_t out = 0;
     const uint32_t kHistMask = kHistSize - 1;
     for (uint32_t bucket = 0; bucket < kHistBuckets; ++bucket)
     {
         const uint32_t in = bucket & 1;
-        const uint32_t out = !in;
+        out = !in;
         uint32_t* restrict offset = hist + (bucket * kHistSize);
         radixpass_u32(offset, bucket * kRadixBits, kHistMask, keys[in], keys[out], values[in],
             values[out], size);
     }
+
+    return out;
 }
 
 
-void radix8sort_u32(uint32_t* restrict keys_in_out, uint32_t* restrict keys_temp,
+uint32_t radix8sort_u32(uint32_t* restrict keys_in_out, uint32_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size)
 {
-    radixsort_u32(8, keys_in_out, keys_temp, values_in_out, values_temp, size);
+    return radixsort_u32(8, keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
-void radix11sort_u32(uint32_t* restrict keys_in, uint32_t* restrict keys_out,
+uint32_t radix11sort_u32(uint32_t* restrict keys_in, uint32_t* restrict keys_out,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size)
 {
-    radixsort_u32(11, keys_in, keys_out, values_in, values_out, size);
+    return radixsort_u32(11, keys_in, keys_out, values_in, values_out, size);
 }
 
 
-static inline void radixsort_u64(uint32_t kRadixBits, uint64_t* restrict keys_in,
+static inline uint32_t radixsort_u64(uint32_t kRadixBits, uint64_t* restrict keys_in,
     uint64_t* restrict keys_temp, uint32_t* restrict values_in, uint32_t* values_temp,
     uint32_t size)
 {
@@ -223,33 +226,36 @@ static inline void radixsort_u64(uint32_t kRadixBits, uint64_t* restrict keys_in
     uint64_t* restrict keys[2] = {keys_in, keys_temp};
     uint32_t* restrict values[2] = {values_in, values_temp};
 
+    uint32_t out = 0;
     const uint32_t kHistMask = kHistSize - 1;
     for (uint32_t bucket = 0; bucket < kHistBuckets; ++bucket)
     {
         const uint32_t in = bucket & 1;
-        const uint32_t out = !in;
+        out = !in;
         uint32_t* restrict offset = hist + (bucket * kHistSize);
         radixpass_u64(offset, bucket * kRadixBits, kHistMask, keys[in], keys[out], values[in],
             values[out], size);
     }
+
+    return out;
 }
 
 
-void radix8sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
+uint32_t radix8sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size)
 {
-    radixsort_u64(8, keys_in_out, keys_temp, values_in_out, values_temp, size);
+    return radixsort_u64(8, keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
-void radix11sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
+uint32_t radix11sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size)
 {
-    radixsort_u64(11, keys_in_out, keys_temp, values_in_out, values_temp, size);
+    return radixsort_u64(11, keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
-static inline void radixsort_f32(const uint32_t kRadixBits, float* restrict keys_in_f32,
+static inline uint32_t radixsort_f32(const uint32_t kRadixBits, float* restrict keys_in_f32,
     float* restrict keys_temp_f32, uint32_t* restrict values_in, uint32_t* values_temp,
     uint32_t size)
 {
@@ -271,10 +277,12 @@ static inline void radixsort_f32(const uint32_t kRadixBits, float* restrict keys
     uint32_t* restrict values[2] = {values_in, values_temp};
     const uint32_t kHistMask = kHistSize - 1;
 
+    uint32_t out;
+
     {
         const uint32_t bucket = 0;
         const uint32_t in = bucket & 1;
-        const uint32_t out = !in;
+        out = !in;
         uint32_t* restrict offset = hist + (bucket * kHistSize);
         for (uint32_t i = 0; i < size; ++i)
         {
@@ -289,7 +297,7 @@ static inline void radixsort_f32(const uint32_t kRadixBits, float* restrict keys
     for (uint32_t bucket = 1; bucket < kHistBuckets - 1; ++bucket)
     {
         const uint32_t in = bucket & 1;
-        const uint32_t out = !in;
+        out = !in;
         uint32_t* restrict offset = hist + (bucket * kHistSize);
         radixpass_u32(offset, bucket * kRadixBits, kHistMask, keys[in], keys[out], values[in],
             values[out], size);
@@ -299,7 +307,7 @@ static inline void radixsort_f32(const uint32_t kRadixBits, float* restrict keys
         const uint32_t bucket = kHistBuckets - 1;
         const uint32_t shift = bucket * kRadixBits;
         const uint32_t in = bucket & 1;
-        const uint32_t out = !in;
+        out = !in;
         uint32_t* restrict offset = hist + (bucket * kHistSize);
         for (uint32_t i = 0; i < size; ++i)
         {
@@ -310,18 +318,20 @@ static inline void radixsort_f32(const uint32_t kRadixBits, float* restrict keys
             values[out][index] = values[in][i];
         }
     }
+
+    return out;
 }
 
 
-void radix8sort_f32(float* restrict keys_in_out_f32, float* restrict keys_temp_f32,
+uint32_t radix8sort_f32(float* restrict keys_in_out_f32, float* restrict keys_temp_f32,
     uint32_t* restrict values_in_out, uint32_t* restrict values_temp, uint32_t size)
 {
-    radixsort_f32(8, keys_in_out_f32, keys_temp_f32, values_in_out, values_temp, size);
+    return radixsort_f32(8, keys_in_out_f32, keys_temp_f32, values_in_out, values_temp, size);
 }
 
 
-void radix11sort_f32(float* restrict keys_in_f32, float* restrict keys_out_f32,
+uint32_t radix11sort_f32(float* restrict keys_in_f32, float* restrict keys_out_f32,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size)
 {
-    radixsort_f32(11, keys_in_f32, keys_out_f32, values_in, values_out, size);
+    return radixsort_f32(11, keys_in_f32, keys_out_f32, values_in, values_out, size);
 }

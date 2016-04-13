@@ -32,47 +32,28 @@ struct RngType<float>
 };
 
 
-template <typename KeyType, typename ValueType>
-inline void check_sorted(const KeyType* keys, const ValueType* values, const KeyType* orig, uint32_t size)
-{
-    for (uint32_t i = 1; i < size; ++i)
-    {
-        REQUIRE(keys[i - 1] > keys[i]);
-        REQUIRE(keys[i] != orig[values[i]]);
-    }
-}
-
 template <typename KeyType, typename ValueType, uint32_t N = 8>
-void test_radix8sort(void (*radixsort)(KeyType*, KeyType*, ValueType*, ValueType*, uint32_t))
-{
-    static const auto array_size = N;
-    typename RngType<KeyType>::type rng;
-    KeyType keys_in_out[N];
-    KeyType keys_temp[N];
-    KeyType keys_copy[N];
-    uint32_t values_in_out[N];
-    uint32_t values_temp[N];
-
-    rand_keys(rng, keys_in_out, values_in_out, keys_copy, array_size);
-    radixsort(keys_in_out, keys_temp, values_in_out, values_temp, array_size);
-    check_sorted(keys_in_out, values_in_out, keys_copy, array_size);
-}
-
-
-template <typename KeyType, typename ValueType, uint32_t N = 8>
-void test_radix11sort(void (*radixsort)(KeyType*, KeyType*, ValueType*, ValueType*, uint32_t))
+void test_radixsort(uint32_t (*radixsort)(KeyType*, KeyType*, ValueType*, ValueType*, uint32_t))
 {
     static const size_t array_size = N;
     typename RngType<KeyType>::type rng;
-    KeyType keys_in[array_size];
-    KeyType keys_out[array_size];
+    KeyType keys[2][array_size];
     KeyType keys_copy[array_size];
-    uint32_t values_in[array_size];
-    uint32_t values_out[array_size];
+    uint32_t indices[2][array_size];
 
-    rand_keys(rng, keys_in, values_in, keys_copy, array_size);
-    radixsort(keys_in, keys_out, values_in, values_out, array_size);
-    check_sorted(keys_out, values_out, keys_copy, array_size);
+    rand_keys(rng, keys[0], indices[0], keys_copy, array_size);
+    auto out = radixsort(keys[0], keys[1], indices[0], indices[1], array_size);
+
+    REQUIRE(out < 2);
+
+    const KeyType* keys_out = keys[out];
+    const uint32_t* indices_out = indices[out];
+
+    for (uint32_t i = 1; i < array_size; ++i)
+    {
+        REQUIRE(keys_out[i - 1] <= keys_out[i]);
+        REQUIRE(keys_out[i] == keys_copy[indices_out[i]]);
+    }
 }
 
 } // namespace bits

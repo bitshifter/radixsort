@@ -27,32 +27,32 @@ namespace bits
 {
 
 template <typename ValueType>
-void radix8sort(uint32_t* __restrict keys_in_out,
+uint32_t radix8sort(uint32_t* __restrict keys_in_out,
     uint32_t* __restrict keys_temp, ValueType* __restrict values_in_out, ValueType* values_temp,
     uint32_t size);
 
 template <typename ValueType>
-void radix8sort(uint64_t* __restrict keys_in_out,
+uint32_t radix8sort(uint64_t* __restrict keys_in_out,
     uint64_t* __restrict keys_temp, ValueType* __restrict values_in_out, ValueType* values_temp,
     uint32_t size);
 
 template <typename ValueType>
-void radix8sort(float* __restrict keys_in_out, float* __restrict keys_temp,
+uint32_t radix8sort(float* __restrict keys_in_out, float* __restrict keys_temp,
     ValueType* __restrict values_in_out, ValueType* __restrict values_temp, uint32_t size);
 
 template <typename ValueType>
-void radix11sort(uint32_t* __restrict keys_in,
-    uint32_t* __restrict keys_out, ValueType* __restrict values_in,
-    ValueType* __restrict values_out, uint32_t size);
+uint32_t radix11sort(uint32_t* __restrict keys_in_out,
+    uint32_t* __restrict keys_temp, ValueType* __restrict values_in_out,
+    ValueType* __restrict values_temp, uint32_t size);
 
 template <typename ValueType>
-void radix11sort(uint64_t* __restrict keys_in,
+uint32_t radix11sort(uint64_t* __restrict keys_in,
     uint64_t* __restrict keys_out, ValueType* __restrict values_in,
     ValueType* __restrict values_out, uint32_t size);
 
 template <typename ValueType>
-void radix11sort(float* __restrict keys_in, float* __restrict keys_out,
-    ValueType* __restrict values_in, ValueType* __restrict values_out, uint32_t size);
+uint32_t radix11sort(float* __restrict keys_in_out, float* __restrict keys_temp,
+    ValueType* __restrict values_in_out, ValueType* __restrict values_temp, uint32_t size);
 
 } // namespace bits
 

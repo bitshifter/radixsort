@@ -83,7 +83,7 @@ private:
     }
 
 public:
-    void operator()(KeyType* __restrict keys_in,
+    uint32_t operator()(KeyType* __restrict keys_in,
         KeyType* __restrict keys_temp, ValueType* __restrict values_in,
         ValueType* __restrict values_temp, uint32_t size) const
     {
@@ -127,11 +127,13 @@ public:
         KeyType* __restrict keys[2] = {keys_in, keys_temp};
         ValueType* __restrict values[2] = {values_in, values_temp};
 
+        uint32_t out = 0;
+
         {
             // decode key on first radix pass
             const uint32_t bucket = 0;
             const uint32_t in = bucket & 1;
-            const uint32_t out = !in;
+            out = !in;
             radix_pass(keys[in], keys[out], values[in], values[out], size, hist[bucket],
                 bucket * kRadixBits, decode_op, pass_through);
         }
@@ -139,7 +141,7 @@ public:
         for (uint32_t bucket = 1; bucket < kHistBuckets - 1; ++bucket)
         {
             const uint32_t in = bucket & 1;
-            const uint32_t out = !in;
+            out = !in;
             radix_pass(keys[in], keys[out], values[in], values[out], size, hist[bucket],
                 bucket * kRadixBits, pass_through, pass_through);
         }
@@ -148,10 +150,12 @@ public:
             // encode key on last radix pass
             const uint32_t bucket = kHistBuckets - 1;
             const uint32_t in = bucket & 1;
-            const uint32_t out = !in;
+            out = !in;
             radix_pass(keys[in], keys[out], values[in], values[out], size, hist[bucket],
                 bucket * kRadixBits, pass_through, encode_op);
         }
+
+        return out;
     }
 };
 
@@ -159,47 +163,47 @@ public:
 
 
 template <typename ValueType>
-inline void radix8sort(uint32_t* __restrict keys_in_out,
+inline uint32_t radix8sort(uint32_t* __restrict keys_in_out,
     uint32_t* __restrict keys_temp, ValueType* __restrict values_in_out, ValueType* values_temp,
     uint32_t size)
 {
     detail::RadixSort<8, uint32_t, ValueType> sort;
-    sort(keys_in_out, keys_temp, values_in_out, values_temp, size);
+    return sort(keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
 template <typename ValueType>
-inline void radix8sort(uint64_t* __restrict keys_in_out,
+inline uint32_t radix8sort(uint64_t* __restrict keys_in_out,
     uint64_t* __restrict keys_temp, ValueType* __restrict values_in_out, ValueType* values_temp,
     uint32_t size)
 {
     detail::RadixSort<8, uint64_t, ValueType> sort;
-    sort(keys_in_out, keys_temp, values_in_out, values_temp, size);
+    return sort(keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
 template <typename ValueType>
-inline void radix11sort(uint32_t* __restrict keys_in,
+inline uint32_t radix11sort(uint32_t* __restrict keys_in,
     uint32_t* __restrict keys_out, ValueType* __restrict values_in,
     ValueType* __restrict values_out, uint32_t size)
 {
     detail::RadixSort<11, uint32_t, ValueType> sort;
-    sort(keys_in, keys_out, values_in, values_out, size);
+    return sort(keys_in, keys_out, values_in, values_out, size);
 }
 
 
 template <typename ValueType>
-inline void radix11sort(uint64_t* __restrict keys_in,
+inline uint32_t radix11sort(uint64_t* __restrict keys_in,
     uint64_t* __restrict keys_out, ValueType* __restrict values_in,
     ValueType* __restrict values_out, uint32_t size)
 {
     detail::RadixSort<11, uint64_t, ValueType> sort;
-    sort(keys_in, keys_out, values_in, values_out, size);
+    return sort(keys_in, keys_out, values_in, values_out, size);
 }
 
 
 template <typename ValueType>
-inline void radix8sort(float* __restrict keys_in_out_f32,
+inline uint32_t radix8sort(float* __restrict keys_in_out_f32,
     float* __restrict keys_temp_f32, ValueType* __restrict values_in_out,
     ValueType* __restrict values_temp, uint32_t size)
 {
@@ -208,12 +212,12 @@ inline void radix8sort(float* __restrict keys_in_out_f32,
     uint32_t* __restrict keys_temp = reinterpret_cast<uint32_t*>(keys_temp_f32);
 
     detail::RadixSort<8, uint32_t, ValueType, detail::FloatFlip, detail::InvFloatFlip> sort;
-    sort(keys_in_out, keys_temp, values_in_out, values_temp, size);
+    return sort(keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
 template <typename ValueType>
-inline void radix11sort(float* __restrict keys_in_f32,
+inline uint32_t radix11sort(float* __restrict keys_in_f32,
     float* __restrict keys_out_f32, ValueType* __restrict values_in,
     ValueType* __restrict values_out, uint32_t size)
 {
@@ -222,7 +226,7 @@ inline void radix11sort(float* __restrict keys_in_f32,
     uint32_t* __restrict keys_out = reinterpret_cast<uint32_t*>(keys_out_f32);
 
     detail::RadixSort<11, uint32_t, ValueType, detail::FloatFlip, detail::InvFloatFlip> sort;
-    sort(keys_in, keys_out, values_in, values_out, size);
+    return sort(keys_in, keys_out, values_in, values_out, size);
 }
 
 } // namespace bits
