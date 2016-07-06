@@ -36,25 +36,37 @@ void perf_test(Rand rng, uint32_t array_size, uint32_t iterations)
         {
             keys0 = keys_orig;
             values0 = values_orig;
-            PRINT_ARRAY(keys0, array_size);
+
+            KeyType* keys[2] = {keys0.data(), keys1.data()};
+            uint32_t* values[2] = {values0.data(), values1.data()};
+
+            PRINT_ARRAY(keys[0], array_size);
+
             auto start = high_resolution_clock::now();
             auto result =
-                radix8sort(keys0.data(), keys1.data(), values0.data(), values1.data(), array_size);
+                radix8sort(keys[0], keys[1], values[0], values[1], array_size);
             radix8_total_s += high_resolution_clock::now() - start;
-            PRINT_ARRAY(result.first, array_size);
-            check_sorted(result.first, result.second, keys_orig.data(), array_size);
+
+            PRINT_ARRAY(keys[result], array_size);
+            check_sorted(keys[result], values[result], keys_orig.data(), array_size);
         }
 
         {
             keys0 = keys_orig;
             values0 = values_orig;
-            PRINT_ARRAY(keys0, array_size);
+
+            KeyType* keys[2] = {keys0.data(), keys1.data()};
+            uint32_t* values[2] = {values0.data(), values1.data()};
+
+            PRINT_ARRAY(keys[0], array_size);
+
             auto start = high_resolution_clock::now();
             auto result =
-                radix11sort(keys0.data(), keys1.data(), values0.data(), values1.data(), array_size);
+                radix11sort(keys[0], keys[1], values[0], values[1], array_size);
             radix11_total_s += high_resolution_clock::now() - start;
-            PRINT_ARRAY(result.first, array_size);
-            check_sorted(result.first, result.second, keys_orig.data(), array_size);
+
+            PRINT_ARRAY(keys[result], array_size);
+            check_sorted(keys[result], values[result], keys_orig.data(), array_size);
         }
 
         {

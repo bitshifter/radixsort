@@ -154,6 +154,7 @@ void perf_test_f32(uint32_t array_size, uint32_t iterations)
         radix11_total_s * inv_iter);
 }
 
+/*
 int main()
 {
     uint32_t start = 32, end = 65536, iterations = 100;
@@ -179,3 +180,4 @@ int main()
         perf_test_f32(i, iterations);
     }
 }
+*/
