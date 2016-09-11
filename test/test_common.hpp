@@ -2,11 +2,46 @@
 #define BITS_TEST_COMMON_HPP
 
 #include "catch.hpp"
-#include "helpers.hpp"
 
 namespace bits
 {
 
+
+inline void rand_keys(
+    std::mt19937& rnd32, uint32_t* keys, uint32_t* indices, uint32_t* copy, uint32_t size)
+{
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        keys[i] = rnd32();
+        copy[i] = keys[i];
+        indices[i] = i;
+    }
+}
+
+inline void rand_keys(
+    std::mt19937_64& rnd64, uint64_t* keys, uint32_t* indices, uint64_t* copy, uint32_t size)
+{
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        keys[i] = rnd64();
+        copy[i] = keys[i];
+        indices[i] = i;
+    }
+}
+
+inline void rand_keys(std::mt19937& rnd32, float* keys, uint32_t* indices, float* copy, uint32_t size)
+{
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        keys[i] = (float)(rnd32()) / 2048.0f;
+        if (rand() & 1)
+        {
+            keys[i] = -keys[i];
+        }
+        copy[i] = keys[i];
+        indices[i] = i;
+    }
+}
 
 template <typename KeyType>
 struct RngType {};

@@ -5,12 +5,10 @@ set(CSRCS
 	)
 
 set(CHDRS
-	../src/c/helpers.h
 	../src/c/radixsort.h
 	)
 
 set(CPPHDRS
-	../src/cpp/helpers.hpp
 	../src/cpp/radixsort.hpp
 	../src/cpp/radixsort.inl
 	)
