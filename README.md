@@ -45,7 +45,7 @@ cd linux64-make/release
 make
 ~~~
 
-This will generate executables in c and cpp subdirectories.
+This will generate executables in bench and test subdirectories.
 
 ## License
 
