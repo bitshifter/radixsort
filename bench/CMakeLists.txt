@@ -19,14 +19,17 @@ set(SRCS
 	main.cpp
 	)
 
+# nonius requires boost and threads
+find_package(Boost)
+find_package(Threads)
+
 # nonius requires exceptions
 if(MSVC)
+	# TODO
 	add_compile_options()
 else()
 	add_compile_options(-fexceptions)
 endif()
-
-find_package(Threads)
 
 add_executable(runbench ${CSRCS} ${CHDRS} ${CPPSRCS} ${CPPHDRS} ${SRCS})
 target_link_libraries(runbench PRIVATE ${CMAKE_THREAD_LIBS_INIT})
