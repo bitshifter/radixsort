@@ -4,6 +4,7 @@
 build/linux*
 build/win*
 obj/
+results.*
 radixsort32
 radixsort32d
 radixsort64

@@ -54,7 +54,7 @@ if(UNIX)
 	set(CMAKE_CXX_FLAGS_LIST ${COMPILER_FLAGS}
 		-fno-exceptions
 		-fno-rtti
-		-std=c++11
+		-std=c++14
 		)
 	set(CMAKE_CXX_FLAGS_DEBUG_LIST ${COMPILER_FLAGS_DEBUG})
 	set(CMAKE_CXX_FLAGS_RELEASE_LIST ${COMPILER_FLAGS_RELEASE})

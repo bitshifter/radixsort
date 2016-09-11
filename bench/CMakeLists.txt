@@ -16,9 +16,18 @@ set(CPPHDRS
 	)
 
 set(SRCS
-	#bench_radixsortc.cpp
-	bench_radixsortcpp.cpp
-	#main.cpp
+	main.cpp
 	)
 
-add_executable("runbench${CMAKE_MACHINE_TYPE}" ${CSRCS} ${CHDRS} ${CPPSRCS} ${CPPHDRS} ${SRCS})
+# nonius requires exceptions
+if(MSVC)
+	add_compile_options()
+else()
+	add_compile_options(-fexceptions)
+endif()
+
+find_package(Threads)
+
+add_executable(runbench ${CSRCS} ${CHDRS} ${CPPSRCS} ${CPPHDRS} ${SRCS})
+target_link_libraries(runbench PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(runbench PRIVATE ../thirdparty/nonius)
