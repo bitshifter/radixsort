@@ -52,8 +52,9 @@ if(UNIX)
 
 	# set C++ flags
 	set(CMAKE_CXX_FLAGS_LIST ${COMPILER_FLAGS}
-		-fno-exceptions
-		-fno-rtti
+		# Catch and Nonius require these
+		#-fno-exceptions
+		#-fno-rtti
 		-std=c++14
 		)
 	set(CMAKE_CXX_FLAGS_DEBUG_LIST ${COMPILER_FLAGS_DEBUG})
@@ -128,9 +129,11 @@ elseif(MSVC)
 	# set C++ flags
 	set(CMAKE_CXX_FLAGS_LIST ${COMPILER_FLAGS}
 		${COMPILER_MACHINE_FLAGS}
-		/D_HAS_EXCEPTIONS=0
-		/GR-
-		/EHs-c-
+		# Catch and Nonius require these
+		#/D_HAS_EXCEPTIONS=0
+		#/GR-
+		#/EHs-c-
+		/EHsc
 		)
 	set(CMAKE_CXX_FLAGS_DEBUG_LIST ${COMPILER_FLAGS_DEBUG})
 	set(CMAKE_CXX_FLAGS_RELEASE_LIST ${COMPILER_FLAGS_RELEASE})

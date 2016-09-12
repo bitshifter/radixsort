@@ -2,6 +2,7 @@
 #define BITS_TEST_COMMON_HPP
 
 #include "catch.hpp"
+#include <random>
 
 namespace bits
 {

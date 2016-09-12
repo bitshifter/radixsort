@@ -5,5 +5,14 @@ include(CompilerAndLinkerOptions)
 
 project(radixsort)
 
-add_subdirectory(bench)
+# Nonius beta not building on MSVC right now
+if(NOT MSVC)
+	# Nonius requires Boost
+	find_package(Threads)
+	find_package(Boost)
+	if(Boost_FOUND AND Threads_FOUND)
+		add_subdirectory(bench)
+	endif()
+endif()
+
 add_subdirectory(test)
