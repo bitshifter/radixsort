@@ -9,7 +9,7 @@
 // You should have received a copy of the CC0 Public Domain Dedication along with this software.
 // If not, see <http://creativecommons.org/publicdomain/zero/1.0/>
 
-// This file was automatically generated on 2016-09-10T04:28:35.924253Z
+// This file was automatically generated on 2016-09-12T09:28:12.182443Z
 // Do not edit it directly
 
 #ifndef NONIUS_SINGLE_INCLUDE_HPP
@@ -1008,7 +1008,7 @@ namespace nonius {
             std::generate_n(std::back_inserter(times), cfg.samples, [this, env]{
                     detail::chronometer_model<Clock> model;
                     detail::optimizer_barrier();
-                    benchmark(chronometer(model, iterations_per_sample, params));
+                    this->benchmark(chronometer(model, iterations_per_sample, params));
                     detail::optimizer_barrier();
                     auto sample_time = model.elapsed() - env.clock_cost.mean;
                     if(sample_time < FloatDuration<Clock>::zero()) sample_time = FloatDuration<Clock>::zero();
@@ -2061,7 +2061,7 @@ namespace nonius {
         }
     }
 
-    std::vector<parameters> generate_params(param_configuration cfg) {
+    inline std::vector<parameters> generate_params(param_configuration cfg) {
         auto params = global_param_registry().defaults().merged(cfg.map);
         if (!cfg.run) {
             return {params};
