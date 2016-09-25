@@ -5,14 +5,11 @@ include(CompilerAndLinkerOptions)
 
 project(radixsort)
 
-# Nonius beta not building on MSVC right now
-if(NOT MSVC)
-	# Nonius requires Boost
-	find_package(Threads)
-	find_package(Boost)
-	if(Boost_FOUND AND Threads_FOUND)
-		add_subdirectory(bench)
-	endif()
+# Nonius requires Boost
+find_package(Boost)
+if(Boost_FOUND)
+	find_package(Threads REQUIRED)
+	add_subdirectory(bench)
 endif()
 
 add_subdirectory(test)
