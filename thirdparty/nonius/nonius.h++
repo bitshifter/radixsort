@@ -9,7 +9,7 @@
 // You should have received a copy of the CC0 Public Domain Dedication along with this software.
 // If not, see <http://creativecommons.org/publicdomain/zero/1.0/>
 
-// This file was automatically generated on 2016-09-12T09:28:12.182443Z
+// This file was automatically generated on 2016-09-25T02:37:35.142620Z
 // Do not edit it directly
 
 #ifndef NONIUS_SINGLE_INCLUDE_HPP
@@ -497,15 +497,22 @@ namespace nonius {
 namespace nonius {
     template <typename Duration>
     struct environment_estimate {
-        Duration mean;
+        Duration mean = {};
         outlier_classification outliers;
+
+        environment_estimate() = default;
+
+        environment_estimate(Duration mean, outlier_classification outliers)
+            : mean(mean)
+            , outliers(outliers)
+        {}
 
         template <typename Duration2>
         operator environment_estimate<Duration2>() const {
             return { mean, outliers };
         }
     };
-    template <typename Clock = default_clock>
+    template <typename Clock>
     struct environment {
         using clock_type = Clock;
         environment_estimate<FloatDuration<Clock>> clock_resolution;
@@ -918,9 +925,22 @@ namespace nonius {
 namespace nonius {
     template <typename Duration, typename Result>
     struct timing {
-        Duration elapsed;
+        Duration elapsed = {};
         Result result;
-        int iterations;
+        int iterations = 0;
+
+        timing() = default;
+
+        timing(Duration elapsed, Result result, int iterations)
+            : elapsed(elapsed)
+            , result(result)
+            , iterations(iterations)
+        {}
+
+        template <typename Duration2>
+        operator timing<Duration2, Result>() const {
+            return timing<Duration2, Result>{ chrono::duration_cast<Duration2>(elapsed), result, iterations };
+        }
     };
     template <typename Clock, typename Sig>
     using TimingOf = timing<Duration<Clock>, detail::CompleteType<detail::ResultOf<Sig>>>;
@@ -930,7 +950,7 @@ namespace nonius {
 
 namespace nonius {
     namespace detail {
-        template <typename Clock = default_clock, typename Fun, typename... Args>
+        template <typename Clock, typename Fun, typename... Args>
         TimingOf<Clock, Fun(Args...)> measure(Fun&& fun, Args&&... args) {
             auto start = Clock::now();
             auto&& r = detail::complete_invoke(fun, std::forward<Args>(args)...);
@@ -967,7 +987,7 @@ namespace nonius {
             }
         };
 
-        template <typename Clock = default_clock, typename Fun>
+        template <typename Clock, typename Fun>
         TimingOf<Clock, Fun(run_for_at_least_argument_t<Clock, Fun>)> run_for_at_least(const parameters& params, Duration<Clock> how_long, int seed, Fun&& fun) {
             auto iters = seed;
             while(iters < (1 << 30)) {
@@ -986,16 +1006,27 @@ namespace nonius {
 namespace nonius {
     template <typename Duration>
     struct execution_plan {
-        int iterations_per_sample;
-        Duration estimated_duration;
+        int iterations_per_sample = 0;
+        Duration estimated_duration = {};
         parameters params;
         detail::benchmark_function benchmark;
-        Duration warmup_time;
-        int warmup_iterations;
+        Duration warmup_time = {};
+        int warmup_iterations = 0;
+
+        execution_plan() = default;
+
+        execution_plan(int iterations_per_sample, Duration estimated_duration, parameters params, detail::benchmark_function benchmark, Duration warmup_time, int warmup_iterations)
+            : iterations_per_sample(iterations_per_sample)
+            , estimated_duration(estimated_duration)
+            , params(params)
+            , benchmark(benchmark)
+            , warmup_time(warmup_time)
+            , warmup_iterations(warmup_iterations)
+        {}
 
         template <typename Duration2>
         operator execution_plan<Duration2>() const {
-            return { iterations_per_sample, estimated_duration, params, benchmark, warmup_time, warmup_iterations };
+            return execution_plan<Duration2>{ iterations_per_sample, estimated_duration, params, benchmark, warmup_time, warmup_iterations };
         }
 
         template <typename Clock>
@@ -1234,14 +1265,23 @@ namespace nonius {
 namespace nonius {
     template <typename Duration>
     struct estimate {
-        Duration point;
-        Duration lower_bound;
-        Duration upper_bound;
-        double confidence_interval;
+        Duration point = {};
+        Duration lower_bound = {};
+        Duration upper_bound = {};
+        double confidence_interval = 0.0;
+
+        estimate() = default;
+
+        estimate(Duration point, Duration lower_bound, Duration upper_bound, double confidence_interval)
+            : point(point)
+            , lower_bound(lower_bound)
+            , upper_bound(upper_bound)
+            , confidence_interval(confidence_interval)
+        {}
 
         template <typename Duration2>
         operator estimate<Duration2>() const {
-            return { point, lower_bound, upper_bound, confidence_interval };
+            return estimate<Duration2>{ point, lower_bound, upper_bound, confidence_interval };
         }
     };
 } // namespace nonius
@@ -2153,7 +2193,7 @@ namespace nonius {
     }
     template <typename Clock = default_clock, typename Iterator>
     void go(configuration cfg, Iterator first, Iterator last, reporter&& rep) {
-        go(cfg, first, last, rep);
+        go<Clock>(cfg, first, last, rep);
     }
     struct no_such_reporter : virtual std::exception {
         char const* what() const NONIUS_NOEXCEPT override {
@@ -2164,8 +2204,8 @@ namespace nonius {
     void go(configuration cfg, benchmark_registry& benchmarks = global_benchmark_registry(), reporter_registry& reporters = global_reporter_registry()) {
         auto it = reporters.find(cfg.reporter);
         if(it == reporters.end()) throw no_such_reporter();
-        validate_benchmarks(benchmarks.begin(), benchmarks.end());
-        go(cfg, benchmarks.begin(), benchmarks.end(), *it->second);
+        validate_benchmarks<Clock>(benchmarks.begin(), benchmarks.end());
+        go<Clock>(cfg, benchmarks.begin(), benchmarks.end(), *it->second);
     }
 } // namespace nonius
 
