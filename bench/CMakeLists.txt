@@ -7,9 +7,10 @@ if(NOT MSVC)
 		)
 endif()
 
-set(CPPHDRS
+set(CPPSRCS
 	../src/cpp/radixsort.hpp
 	../src/cpp/radixsort.inl
+	../thirdparty/nonius/nonius.hpp
 	)
 
 set(SRCS

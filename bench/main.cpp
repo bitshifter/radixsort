@@ -2,7 +2,7 @@
 #include "radixsort.h"
 
 #define NONIUS_RUNNER
-#include <nonius.h++>
+#include <nonius.hpp>
 
 namespace
 {
