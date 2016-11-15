@@ -17,10 +17,9 @@ set(SRCS
 	main.cpp
 	)
 
-# nonius requires boost and threads
-find_package(Boost REQUIRED)
+# nonius requires threads
 find_package(Threads REQUIRED)
 
 add_executable(runbench ${CSRCS} ${CPPSRCS} ${SRCS})
 target_link_libraries(runbench PRIVATE ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(runbench PRIVATE ../thirdparty/nonius ${Boost_INCLUDE_DIRS})
+target_include_directories(runbench PRIVATE ../thirdparty/nonius)
