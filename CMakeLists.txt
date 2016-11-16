@@ -13,6 +13,7 @@ if(NOT MSVC)
 		src/c/radixsort.c
 		src/c/radixsort.h
 		)
+	add_definitions(-DHAVE_C99_SUPPORT)
 endif()
 
 set(CPPSRCS
