@@ -882,14 +882,14 @@ namespace nonius {
         /// it may be slow, but it is consistently slow.
         struct benchmark_function {
         private:
-            struct concept {
+            struct concept_t {
                 virtual benchmark_function call(parameters params) const = 0;
                 virtual void call(chronometer meter) const = 0;
-                virtual concept* clone() const = 0;
-                virtual ~concept() = default;
+                virtual concept_t* clone() const = 0;
+                virtual ~concept_t() = default;
             };
             template <typename Fun>
-            struct model : public concept {
+            struct model : public concept_t {
                 model(Fun&& fun) : fun(std::move(fun)) {}
                 model(Fun const& fun) : fun(fun) {}
 
@@ -957,7 +957,7 @@ namespace nonius {
             benchmark_function operator()(parameters params) const { return f->call(params); }
             void operator()(chronometer meter) const { f->call(meter); }
         private:
-            std::unique_ptr<concept> f;
+            std::unique_ptr<concept_t> f;
         };
     } // namespace detail
 } // namespace nonius
@@ -2962,6 +2962,9 @@ namespace cpptempl
         data_ptr(const data_ptr& data) {
             ptr = data.ptr;
         }
+        void operator=(const data_ptr& data) {
+            ptr = data.ptr;
+        }
         template<typename T> void operator = (const T& data);
         void push_back(const data_ptr& data);
         virtual ~data_ptr() {}
@@ -2983,7 +2986,6 @@ namespace cpptempl
     };
 
     template<> inline void data_ptr::operator = (const data_ptr& data);
-    template<> void data_ptr::operator = (const std::string& data);
     template<> void data_ptr::operator = (const std::string& data);
     template<> void data_ptr::operator = (const data_map& data);
     template<typename T>
