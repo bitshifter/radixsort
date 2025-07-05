@@ -92,7 +92,7 @@ public:
         PassThrough pass_through;
 
         // Initialise each histogram bucket with the key value
-        uint32_t hist[kHistBuckets][kHistSize] = {0};
+        uint32_t hist[kHistBuckets][kHistSize] = {};
         for (uint32_t i = 0; i < size; ++i)
         {
             const KeyType key = decode_op(keys_in[i]);
