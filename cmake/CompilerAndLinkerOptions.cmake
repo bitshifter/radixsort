@@ -28,7 +28,7 @@ if(UNIX)
 	set(COMPILER_FLAGS
 		-Wall
 		-Wextra
-		-ffast-math
+#		-ffast-math
 		-g
 		${CMAKE_MACHINE_FLAGS}
 		)
@@ -76,7 +76,7 @@ elseif(MSVC)
 
 		# Code generation
 		/Gy			# Enable function level linking
-		/fp:fast	# Fast floating point model
+		#/fp:fast	# Fast floating point model
 
 		# Additional Options
 		/d2Zi+
