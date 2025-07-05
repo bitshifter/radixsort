@@ -33,9 +33,10 @@ add_executable(bench ${CSRCS} ${CPPSRCS} ${BENCH_SRCS})
 target_link_libraries(bench PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(bench PRIVATE thirdparty/nonius)
 
+add_subdirectory(thirdparty/Catch2)
+
 set(TEST_SRCS
 	test/test_radixsortcpp.cpp
-	test/main.cpp
 	)
 
 if(NOT MSVC)
@@ -45,5 +46,4 @@ if(NOT MSVC)
 endif()
 
 add_executable(tests ${CSRCS} ${CPPSRCS} ${TEST_SRCS})
-target_include_directories(tests PRIVATE thirdparty/Catch)
-set_target_properties(tests PROPERTIES OUTPUT_NAME test)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
