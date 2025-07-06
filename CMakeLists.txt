@@ -11,14 +11,12 @@ add_subdirectory(thirdparty/Catch2)
 
 include_directories(src/cpp)
 
-if(NOT MSVC)
-	include_directories(src/c)
-	set(CSRCS
-		src/c/radixsort.c
-		src/c/radixsort.h
-		)
-	add_definitions(-DHAVE_C99_SUPPORT)
-endif()
+include_directories(src/c)
+set(CSRCS
+	src/c/radixsort.c
+	src/c/radixsort.h
+	)
+add_definitions(-DHAVE_C99_SUPPORT)
 
 set(CPPSRCS
 	src/cpp/radixsort.hpp
@@ -34,13 +32,8 @@ target_link_libraries(bench PRIVATE Catch2::Catch2WithMain)
 
 set(TEST_SRCS
 	test/test_radixsortcpp.cpp
+	test/test_radixsortc.cpp
 	)
-
-if(NOT MSVC)
-	list( APPEND TEST_SRCS
-		test/test_radixsortc.cpp
-		)
-endif()
 
 add_executable(tests ${CSRCS} ${CPPSRCS} ${TEST_SRCS})
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
