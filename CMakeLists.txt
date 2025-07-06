@@ -5,6 +5,8 @@ project(radixsort)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(CompilerAndLinkerOptions)
 
+add_subdirectory(thirdparty/Catch2)
+
 include_directories(src/cpp)
 
 if(NOT MSVC)
@@ -22,18 +24,15 @@ set(CPPSRCS
 	)
 
 # nonius requires threads
-find_package(Threads)
+#find_package(Threads)
 
 set(BENCH_SRCS
 	bench/main.cpp
-	thirdparty/nonius/nonius.hpp
+	#thirdparty/nonius/nonius.hpp
 	)
 
 add_executable(bench ${CSRCS} ${CPPSRCS} ${BENCH_SRCS})
-target_link_libraries(bench PRIVATE ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(bench PRIVATE thirdparty/nonius)
-
-add_subdirectory(thirdparty/Catch2)
+target_link_libraries(bench PRIVATE Catch2::Catch2WithMain)
 
 set(TEST_SRCS
 	test/test_radixsortcpp.cpp
