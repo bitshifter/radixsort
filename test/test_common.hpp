@@ -1,12 +1,11 @@
 #ifndef BITS_TEST_COMMON_HPP
 #define BITS_TEST_COMMON_HPP
 
-#include "catch.hpp"
+#include <catch2/catch_test_macros.hpp>
 #include <random>
 
 namespace bits
 {
-
 
 inline void rand_keys(
     std::mt19937& rnd32, uint32_t* keys, uint32_t* indices, uint32_t* copy, uint32_t size)
