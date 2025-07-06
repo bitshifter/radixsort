@@ -2,6 +2,7 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 
 #include <random>
+#include <cstdio>
 
 #include "radixsort.hpp"
 #if HAVE_C99_SUPPORT
@@ -72,10 +73,9 @@ TEST_CASE("bench")
 
     constexpr size_t NAME_SIZE = 1024;
     char name[NAME_SIZE];
-    //auto& registry = nonius::global_benchmark_registry();
     for (uint32_t size = start; size <= end; size = size << inc)
     {
-        sprintf_s(name, NAME_SIZE, "%d uint32_t key bits::radix8sort", size);
+        snprintf(name, NAME_SIZE, "%d uint32_t key bits::radix8sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint32_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -85,7 +85,7 @@ TEST_CASE("bench")
                 };
 
 #if HAVE_C99_SUPPORT
-        sprintf_s(name, NAME_SIZE, "%d uint32_t key radix8sort_u32", size);
+        snprintf(name, NAME_SIZE, "%d uint32_t key radix8sort_u32", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint32_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -95,7 +95,7 @@ TEST_CASE("bench")
                 };
 #endif
 
-        sprintf_s(name, NAME_SIZE, "%d uint32_t key bits::radix11sort", size);
+        snprintf(name, NAME_SIZE, "%d uint32_t key bits::radix11sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint32_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -105,7 +105,7 @@ TEST_CASE("bench")
                 };
 
 #if HAVE_C99_SUPPORT
-        sprintf_s(name, NAME_SIZE, "%d uint32_t key radix11sort_u32", size);
+        snprintf(name, NAME_SIZE, "%d uint32_t key radix11sort_u32", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint32_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -115,7 +115,7 @@ TEST_CASE("bench")
                 };
 #endif
 
-        sprintf_s(name, NAME_SIZE, "%d uint32_t key std::sort", size);
+        snprintf(name, NAME_SIZE, "%d uint32_t key std::sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint32_data.run_data(size);
                 meter.measure([first=std::begin(data.keys0_), last=std::end(data.keys0_)] {
@@ -127,7 +127,7 @@ TEST_CASE("bench")
 
     for (uint32_t size = start; size <= end; size = size << inc)
     {
-        sprintf_s(name, NAME_SIZE, "%d uint64_t key bits::radix8sort", size);
+        snprintf(name, NAME_SIZE, "%d uint64_t key bits::radix8sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint64_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -137,7 +137,7 @@ TEST_CASE("bench")
                 };
 
 #if HAVE_C99_SUPPORT
-        sprintf_s(name, NAME_SIZE, "%d uint64_t key radix8sort_u64", size);
+        snprintf(name, NAME_SIZE, "%d uint64_t key radix8sort_u64", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint64_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -147,7 +147,7 @@ TEST_CASE("bench")
                 };
 #endif
 
-        sprintf_s(name, NAME_SIZE, "%d uint64_t key bits::radix11sort", size);
+        snprintf(name, NAME_SIZE, "%d uint64_t key bits::radix11sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint64_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -157,7 +157,7 @@ TEST_CASE("bench")
                 };
 
 #if HAVE_C99_SUPPORT
-        sprintf_s(name, NAME_SIZE, "%d uint64_t key radix11sort_u64", size);
+        snprintf(name, NAME_SIZE, "%d uint64_t key radix11sort_u64", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint64_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -167,7 +167,7 @@ TEST_CASE("bench")
                 };
 #endif
 
-        sprintf_s(name, NAME_SIZE, "%d uint64_t key std::sort", size);
+        snprintf(name, NAME_SIZE, "%d uint64_t key std::sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = uint64_data.run_data(size);
                 meter.measure([first=std::begin(data.keys0_), last=std::end(data.keys0_)] {
@@ -179,7 +179,7 @@ TEST_CASE("bench")
 
     for (uint32_t size = start; size <= end; size = size << inc)
     {
-        sprintf_s(name, NAME_SIZE, "%d float key bits::radix8sort", size);
+        snprintf(name, NAME_SIZE, "%d float key bits::radix8sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = float_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -189,7 +189,7 @@ TEST_CASE("bench")
                 };
 
 #if HAVE_C99_SUPPORT
-        sprintf_s(name, NAME_SIZE, "%d float key radix8sort_f32", size);
+        snprintf(name, NAME_SIZE, "%d float key radix8sort_f32", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = float_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -199,7 +199,7 @@ TEST_CASE("bench")
                 };
 #endif
 
-        sprintf_s(name, NAME_SIZE, "%d float key bits::radix11sort", size);
+        snprintf(name, NAME_SIZE, "%d float key bits::radix11sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = float_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -209,7 +209,7 @@ TEST_CASE("bench")
                 };
 
 #if HAVE_C99_SUPPORT
-        sprintf_s(name, NAME_SIZE, "%d float key radix11sort_f32", size);
+        snprintf(name, NAME_SIZE, "%d float key radix11sort_f32", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = float_data.run_data(size);
                 meter.measure([keys0=data.keys0(), keys1=data.keys1(),
@@ -219,7 +219,7 @@ TEST_CASE("bench")
                 };
 #endif
 
-        sprintf_s(name, NAME_SIZE, "%d float key std::sort", size);
+        snprintf(name, NAME_SIZE, "%d float key std::sort", size);
         BENCHMARK_ADVANCED(name)(Catch::Benchmark::Chronometer meter) {
                 auto data = float_data.run_data(size);
                 meter.measure([first=std::begin(data.keys0_), last=std::end(data.keys0_)] {
