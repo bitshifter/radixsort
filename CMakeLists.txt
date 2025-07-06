@@ -23,12 +23,8 @@ set(CPPSRCS
 	src/cpp/radixsort.inl
 	)
 
-# nonius requires threads
-#find_package(Threads)
-
 set(BENCH_SRCS
-	bench/main.cpp
-	#thirdparty/nonius/nonius.hpp
+	bench/bench_radixsort.cpp
 	)
 
 add_executable(bench ${CSRCS} ${CPPSRCS} ${BENCH_SRCS})
