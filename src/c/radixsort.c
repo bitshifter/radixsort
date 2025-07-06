@@ -21,6 +21,16 @@
 #include <assert.h>
 #include <string.h>
 
+#define RADIX_BITS_8 8
+#define RADIX_BITS_11 11
+#define HIST_SIZE_8 (1 << 8)
+#define HIST_SIZE_11 (1 << 11)
+
+#define HIST_BUCKETS_32_8 (uint32_t)(1 + (((sizeof(uint32_t) * 8) - 1) / 8))
+#define HIST_BUCKETS_32_11 (uint32_t)(1 + (((sizeof(uint32_t) * 8) - 1) / 11))
+
+#define HIST_BUCKETS_64_8 (uint32_t)(1 + (((sizeof(uint64_t) * 8) - 1) / 8))
+#define HIST_BUCKETS_64_11 (uint32_t)(1 + (((sizeof(uint64_t) * 8) - 1) / 11))
 
 /**
  * Flip a float for sorting.
@@ -28,7 +38,7 @@
  *  if it's 1 (negative float), it flips all bits
  *  if it's 0 (positive float), it flips the sign only
  */
-static inline uint32_t float_flip(uint32_t f)
+static inline uint32_t float_flip(const uint32_t f)
 {
     uint32_t mask = -((int32_t)(f >> 31)) | 0x80000000;
     return f ^ mask;
@@ -40,7 +50,7 @@ static inline uint32_t float_flip(uint32_t f)
  *  if sign is 1 (negative), it flips the sign bit back
  *  if sign is 0 (positive), it flips all bits back
  */
-static inline uint32_t inv_float_flip(uint32_t f)
+static inline uint32_t inv_float_flip(const uint32_t f)
 {
     uint32_t mask = ((f >> 31) - 1) | 0x80000000;
     return f ^ mask;
@@ -49,9 +59,11 @@ static inline uint32_t inv_float_flip(uint32_t f)
 /**
   * Initialise each histogram bucket with the key value
   */
-static void init_histograms_u32(uint32_t kRadixBits, uint32_t kHistBuckets, uint32_t kHistSize,
-    uint32_t* restrict hist, const uint32_t* restrict keys_in, uint32_t size)
+static void init_histograms_u32(const uint32_t kRadixBits, const uint32_t kHistBuckets, const uint32_t kHistSize,
+    uint32_t* restrict hist, const uint32_t* restrict keys_in, const uint32_t size)
 {
+    memset(hist, 0, sizeof(uint32_t) * kHistBuckets * kHistSize);
+
     const uint32_t kHistMask = kHistSize - 1;
     for (uint32_t i = 0; i < size; ++i)
     {
@@ -67,9 +79,11 @@ static void init_histograms_u32(uint32_t kRadixBits, uint32_t kHistBuckets, uint
 }
 
 
-static void init_histograms_u64(uint32_t kRadixBits, uint32_t kHistBuckets, uint32_t kHistSize,
-    uint32_t* restrict hist, const uint64_t* restrict keys_in, uint32_t size)
+static void init_histograms_u64(const uint32_t kRadixBits, const uint32_t kHistBuckets, const uint32_t kHistSize,
+    uint32_t* restrict hist, const uint64_t* restrict keys_in, const uint32_t size)
 {
+    memset(hist, 0, sizeof(uint32_t) * kHistBuckets * kHistSize);
+
     const uint32_t kHistMask = kHistSize - 1;
     for (uint32_t i = 0; i < size; ++i)
     {
@@ -85,9 +99,11 @@ static void init_histograms_u64(uint32_t kRadixBits, uint32_t kHistBuckets, uint
 }
 
 
-static void init_histograms_f32(uint32_t kRadixBits, uint32_t kHistBuckets, uint32_t kHistSize,
-    uint32_t* restrict hist, const uint32_t* restrict keys_in, uint32_t size)
+static void init_histograms_f32(const uint32_t kRadixBits, const uint32_t kHistBuckets, const uint32_t kHistSize,
+    uint32_t* restrict hist, const uint32_t* restrict keys_in, const uint32_t size)
 {
+    memset(hist, 0, sizeof(uint32_t) * kHistBuckets * kHistSize);
+
     const uint32_t kHistMask = kHistSize - 1;
     for (uint32_t i = 0; i < size; ++i)
     {
@@ -106,9 +122,8 @@ static void init_histograms_f32(uint32_t kRadixBits, uint32_t kHistBuckets, uint
 /**
  * Update the histogram data so each entry sums the previous entries.
  */
-static void sum_histograms(uint32_t kHistBuckets, uint32_t kHistSize, uint32_t* restrict hist)
+static void sum_histograms(uint32_t* restrict sum, const uint32_t kHistBuckets, const uint32_t kHistSize, uint32_t* restrict hist)
 {
-    uint32_t sum[kHistBuckets];
     for (uint32_t bucket = 0; bucket < kHistBuckets; ++bucket)
     {
         uint32_t* restrict offset = hist + (bucket * kHistSize);
@@ -133,9 +148,9 @@ static void sum_histograms(uint32_t kHistBuckets, uint32_t kHistSize, uint32_t* 
 /**
  * Perform a radix sort pass for the given bit shift and mask.
  */
-static inline void radixpass_u32(uint32_t* restrict hist, uint32_t shift, uint32_t mask,
+static inline void radixpass_u32(uint32_t* restrict hist, const uint32_t shift, const uint32_t mask,
     const uint32_t* restrict keys_in, uint32_t* restrict keys_out,
-    const uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size)
+    const uint32_t* restrict values_in, uint32_t* restrict values_out, const uint32_t size)
 {
     for (uint32_t i = 0; i < size; ++i)
     {
@@ -148,9 +163,9 @@ static inline void radixpass_u32(uint32_t* restrict hist, uint32_t shift, uint32
 }
 
 
-static inline void radixpass_u64(uint32_t* restrict hist, uint32_t shift, uint32_t mask,
+static inline void radixpass_u64(uint32_t* restrict hist, const uint32_t shift, const uint32_t mask,
     const uint64_t* restrict keys_in, uint64_t* restrict keys_out,
-    const uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size)
+    const uint32_t* restrict values_in, uint32_t* restrict values_out, const uint32_t size)
 {
     for (uint32_t i = 0; i < size; ++i)
     {
@@ -163,18 +178,13 @@ static inline void radixpass_u64(uint32_t* restrict hist, uint32_t shift, uint32
 }
 
 
-static inline uint32_t radixsort_u32(uint32_t kRadixBits, uint32_t* restrict keys_in,
+static inline uint32_t radixsort_u32(const uint32_t kRadixBits, const uint32_t kHistBuckets, const uint32_t kHistSize, uint32_t* restrict hist, uint32_t* restrict sum, uint32_t* restrict keys_in,
     uint32_t* restrict keys_temp, uint32_t* restrict values_in, uint32_t* values_temp,
-    uint32_t size)
+    const uint32_t size)
 {
-    const uint32_t kHistBuckets = 1 + (((sizeof(uint32_t) * 8) - 1) / kRadixBits);
-    const uint32_t kHistSize = 1 << kRadixBits;
-    uint32_t hist[kHistBuckets * kHistSize];
-    memset(hist, 0, sizeof(uint32_t) * kHistBuckets * kHistSize);
-
     init_histograms_u32(kRadixBits, kHistBuckets, kHistSize, hist, keys_in, size);
 
-    sum_histograms(kHistBuckets, kHistSize, hist);
+    sum_histograms(sum, kHistBuckets, kHistSize, hist);
 
     // alternate input and output buffers on each radix pass
     uint32_t* restrict keys[2] = {keys_in, keys_temp};
@@ -198,29 +208,28 @@ static inline uint32_t radixsort_u32(uint32_t kRadixBits, uint32_t* restrict key
 uint32_t radix8sort_u32(uint32_t* restrict keys_in_out, uint32_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size)
 {
-    return radixsort_u32(8, keys_in_out, keys_temp, values_in_out, values_temp, size);
+    uint32_t hist[HIST_BUCKETS_32_8 * HIST_SIZE_8];
+    uint32_t sum[HIST_BUCKETS_32_8];
+    return radixsort_u32(RADIX_BITS_8, HIST_BUCKETS_32_8, HIST_SIZE_8, hist, sum, keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
 uint32_t radix11sort_u32(uint32_t* restrict keys_in, uint32_t* restrict keys_out,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size)
 {
-    return radixsort_u32(11, keys_in, keys_out, values_in, values_out, size);
+    uint32_t hist[HIST_BUCKETS_32_11 * HIST_SIZE_11];
+    uint32_t sum[HIST_BUCKETS_32_11];
+    return radixsort_u32(RADIX_BITS_11, HIST_BUCKETS_32_11, HIST_SIZE_11, hist, sum, keys_in, keys_out, values_in, values_out, size);
 }
 
 
-static inline uint32_t radixsort_u64(uint32_t kRadixBits, uint64_t* restrict keys_in,
+static inline uint32_t radixsort_u64(const uint32_t kRadixBits, const uint32_t kHistBuckets, const uint32_t kHistSize, uint32_t* restrict hist, uint32_t* restrict sum, uint64_t* restrict keys_in,
     uint64_t* restrict keys_temp, uint32_t* restrict values_in, uint32_t* values_temp,
-    uint32_t size)
+    const uint32_t size)
 {
-    const uint32_t kHistBuckets = 1 + (((sizeof(uint64_t) * 8) - 1) / kRadixBits);
-    const uint32_t kHistSize = 1 << kRadixBits;
-    uint32_t hist[kHistBuckets * kHistSize];
-    memset(hist, 0, sizeof(uint32_t) * kHistBuckets * kHistSize);
-
     init_histograms_u64(kRadixBits, kHistBuckets, kHistSize, hist, keys_in, size);
 
-    sum_histograms(kHistBuckets, kHistSize, hist);
+    sum_histograms(sum, kHistBuckets, kHistSize, hist);
 
     // alternate input and output buffers on each radix pass
     uint64_t* restrict keys[2] = {keys_in, keys_temp};
@@ -244,33 +253,32 @@ static inline uint32_t radixsort_u64(uint32_t kRadixBits, uint64_t* restrict key
 uint32_t radix8sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size)
 {
-    return radixsort_u64(8, keys_in_out, keys_temp, values_in_out, values_temp, size);
+    uint32_t hist[HIST_BUCKETS_64_8 * HIST_SIZE_8];
+    uint32_t sum[HIST_BUCKETS_64_8];
+    return radixsort_u64(RADIX_BITS_8, HIST_BUCKETS_64_8, HIST_SIZE_8, hist, sum, keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
 uint32_t radix11sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size)
 {
-    return radixsort_u64(11, keys_in_out, keys_temp, values_in_out, values_temp, size);
+    uint32_t hist[HIST_BUCKETS_64_11 * HIST_SIZE_11];
+    uint32_t sum[HIST_BUCKETS_64_11];
+    return radixsort_u64(RADIX_BITS_11, HIST_BUCKETS_64_11, HIST_SIZE_11, hist, sum, keys_in_out, keys_temp, values_in_out, values_temp, size);
 }
 
 
-static inline uint32_t radixsort_f32(const uint32_t kRadixBits, float* restrict keys_in_f32,
+static inline uint32_t radixsort_f32(const uint32_t kRadixBits, const uint32_t kHistBuckets, const uint32_t kHistSize, uint32_t* restrict hist, uint32_t* restrict sum, float* keys_in_f32,
     float* restrict keys_temp_f32, uint32_t* restrict values_in, uint32_t* values_temp,
-    uint32_t size)
+    const uint32_t size)
 {
     // create uint32_t pointers to inputs to avoid float to int casting
     uint32_t* restrict keys_in = (uint32_t*)keys_in_f32;
     uint32_t* restrict keys_temp = (uint32_t*)keys_temp_f32;
 
-    const uint32_t kHistBuckets = 1 + (((sizeof(uint32_t) * 8) - 1) / kRadixBits);
-    const uint32_t kHistSize = 1 << kRadixBits;
-    uint32_t hist[kHistBuckets * kHistSize];
-    memset(hist, 0, sizeof(uint32_t) * kHistBuckets * kHistSize);
-
     init_histograms_f32(kRadixBits, kHistBuckets, kHistSize, hist, keys_in, size);
 
-    sum_histograms(kHistBuckets, kHistSize, hist);
+    sum_histograms(sum, kHistBuckets, kHistSize, hist);
 
     // alternate input and output buffers on each radix pass
     uint32_t* restrict keys[2] = {keys_in, keys_temp};
@@ -326,12 +334,16 @@ static inline uint32_t radixsort_f32(const uint32_t kRadixBits, float* restrict 
 uint32_t radix8sort_f32(float* restrict keys_in_out_f32, float* restrict keys_temp_f32,
     uint32_t* restrict values_in_out, uint32_t* restrict values_temp, uint32_t size)
 {
-    return radixsort_f32(8, keys_in_out_f32, keys_temp_f32, values_in_out, values_temp, size);
+    uint32_t hist[HIST_BUCKETS_32_8 * HIST_SIZE_8];
+    uint32_t sum[HIST_BUCKETS_32_8];
+    return radixsort_f32(RADIX_BITS_8, HIST_BUCKETS_32_8, HIST_SIZE_8, hist, sum, keys_in_out_f32, keys_temp_f32, values_in_out, values_temp, size);
 }
 
 
 uint32_t radix11sort_f32(float* restrict keys_in_f32, float* restrict keys_out_f32,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size)
 {
-    return radixsort_f32(11, keys_in_f32, keys_out_f32, values_in, values_out, size);
+    uint32_t hist[HIST_BUCKETS_32_11 * HIST_SIZE_11];
+    uint32_t sum[HIST_BUCKETS_32_11];
+    return radixsort_f32(RADIX_BITS_11, HIST_BUCKETS_32_11, HIST_SIZE_11, hist, sum, keys_in_f32, keys_out_f32, values_in, values_out, size);
 }
