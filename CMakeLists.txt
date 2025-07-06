@@ -5,6 +5,8 @@ project(radixsort)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(CompilerAndLinkerOptions)
 
+include(CTest)
+
 add_subdirectory(thirdparty/Catch2)
 
 include_directories(src/cpp)
@@ -42,3 +44,4 @@ endif()
 
 add_executable(tests ${CSRCS} ${CPPSRCS} ${TEST_SRCS})
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+add_test(NAME tests COMMAND tests)
