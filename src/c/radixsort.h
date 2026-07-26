@@ -27,26 +27,50 @@
 #define restrict __restrict
 #endif
 
+/* Export/import macros for shared library builds.
+ *
+ * When building the shared library, RADIXSORT_C_API resolves to
+ * __declspec(dllexport) or __attribute__((visibility("default"))).
+ * When consuming it via the shared library, it resolves to
+ * __declspec(dllimport) (Windows) or is empty (other platforms).
+ * Define RADIXSORT_C_STATIC before including this header to
+ * suppress all DLL annotations (e.g. when compiling the source
+ * directly into an executable).
+ */
+#if defined(RADIXSORT_C_STATIC)
+  #define RADIXSORT_C_API
+#elif defined(_WIN32) || defined(__CYGWIN__)
+  #ifdef radixsort_c_EXPORTS
+    #define RADIXSORT_C_API __declspec(dllexport)
+  #else
+    #define RADIXSORT_C_API __declspec(dllimport)
+  #endif
+#elif defined(__GNUC__) && __GNUC__ >= 4
+  #define RADIXSORT_C_API __attribute__((visibility("default")))
+#else
+  #define RADIXSORT_C_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern uint32_t radix8sort_u32(uint32_t* restrict keys_in_out, uint32_t* restrict keys_temp,
+RADIXSORT_C_API uint32_t radix8sort_u32(uint32_t* restrict keys_in_out, uint32_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size);
 
-extern uint32_t radix8sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
+RADIXSORT_C_API uint32_t radix8sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size);
 
-extern uint32_t radix8sort_f32(float* restrict keys_in_out, float* restrict keys_temp,
+RADIXSORT_C_API uint32_t radix8sort_f32(float* restrict keys_in_out, float* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* restrict values_temp, uint32_t size);
 
-extern uint32_t radix11sort_u32(uint32_t* restrict keys_in, uint32_t* restrict keys_out,
+RADIXSORT_C_API uint32_t radix11sort_u32(uint32_t* restrict keys_in, uint32_t* restrict keys_out,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size);
 
-extern uint32_t radix11sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
+RADIXSORT_C_API uint32_t radix11sort_u64(uint64_t* restrict keys_in_out, uint64_t* restrict keys_temp,
     uint32_t* restrict values_in_out, uint32_t* values_temp, uint32_t size);
 
-extern uint32_t radix11sort_f32(float* restrict keys_in, float* restrict keys_out,
+RADIXSORT_C_API uint32_t radix11sort_f32(float* restrict keys_in, float* restrict keys_out,
     uint32_t* restrict values_in, uint32_t* restrict values_out, uint32_t size);
 
 #ifdef __cplusplus

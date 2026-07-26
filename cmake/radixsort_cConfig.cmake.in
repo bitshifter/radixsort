@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/radixsort_cTargets.cmake")
+
+check_required_components(radixsort_c)
